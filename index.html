@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Резюме</title>
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.cdnfonts.com/css/museo-sans-cyrl" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ru.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/index.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body x-data="resumeData()">
+
+  <!-- Экран выбора шаблона -->
+  <div class="template-select-screen" x-show="!selectedTemplate">
+    <div class="template-select-inner">
+      <div class="template-select-header">
+        <img src="logo.png" alt="Логотип" style="height:40px; width:auto;">
+        <h1 class="template-select-title">Выберите шаблон резюме</h1>
+        <p class="template-select-subtitle">Данные можно будет изменить в любой момент</p>
+      </div>
+      <div class="template-select-cards">
+        <div class="template-card" @click="selectedTemplate = 1; $nextTick(() => initScaler())">
+          <div class="template-card-preview template-card-preview--1">
+            <div class="tpl-preview-left" style="background:#FEECFF;">
+              <div style="width:48px; height:48px; border-radius:50%; background:#e0c8e8; margin:0 auto 8px;"></div>
+              <div style="height:6px; background:#334969; opacity:0.4; border-radius:3px; margin-bottom:4px;"></div>
+              <div style="height:4px; background:#334969; opacity:0.2; border-radius:3px; margin-bottom:4px;"></div>
+              <div style="height:4px; background:#334969; opacity:0.2; border-radius:3px; width:70%;"></div>
+            </div>
+            <div class="tpl-preview-right">
+              <div style="height:10px; background:#172a46; opacity:0.8; border-radius:3px; margin-bottom:6px; width:60%;"></div>
+              <div style="height:6px; background:#172a46; opacity:0.4; border-radius:3px; margin-bottom:16px; width:40%;"></div>
+              <div style="height:4px; background:#172a46; opacity:0.15; border-radius:3px; margin-bottom:4px;"></div>
+              <div style="display:flex; gap:6px; margin-bottom:8px;">
+                <div style="width:8px; height:8px; border-radius:50%; border:1px solid #172a46; flex-shrink:0; margin-top:2px;"></div>
+                <div style="flex:1;">
+                  <div style="height:4px; background:#172a46; opacity:0.3; border-radius:3px; margin-bottom:3px;"></div>
+                  <div style="height:3px; background:#172a46; opacity:0.15; border-radius:3px;"></div>
+                </div>
+              </div>
+              <div style="display:flex; gap:6px; margin-bottom:8px;">
+                <div style="width:8px; height:8px; border-radius:50%; border:1px solid #172a46; flex-shrink:0; margin-top:2px;"></div>
+                <div style="flex:1;">
+                  <div style="height:4px; background:#172a46; opacity:0.3; border-radius:3px; margin-bottom:3px;"></div>
+                  <div style="height:3px; background:#172a46; opacity:0.15; border-radius:3px;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="template-card-info">
+            <div class="template-card-name">Шаблон 1</div>
+            <div class="template-card-desc">Классический с цветной боковой панелью</div>
+          </div>
+        </div>
+
+        <div class="template-card" @click="selectedTemplate = 2; $nextTick(() => initScaler())">
+          <div class="template-card-preview template-card-preview--2">
+            <div class="tpl-preview-left" style="background:#f0f4ff;">
+              <div style="width:48px; height:48px; border-radius:50%; background:#c8d8f0; margin:0 auto 8px;"></div>
+              <div style="background:#fff; border-radius:8px; padding:6px 8px; margin-bottom:6px;">
+                <div style="height:5px; background:#008af5; opacity:0.8; border-radius:3px; margin-bottom:4px; width:70%;"></div>
+                <div style="height:3px; background:#334969; opacity:0.3; border-radius:3px; margin-bottom:2px;"></div>
+                <div style="height:3px; background:#334969; opacity:0.2; border-radius:3px; width:80%;"></div>
+              </div>
+              <div style="background:#fff; border-radius:8px; padding:6px 8px;">
+                <div style="height:5px; background:#008af5; opacity:0.8; border-radius:3px; margin-bottom:4px; width:60%;"></div>
+                <div style="height:3px; background:#334969; opacity:0.2; border-radius:3px;"></div>
+              </div>
+            </div>
+            <div class="tpl-preview-right" style="background:#f8faff;">
+              <div style="background:linear-gradient(79deg,#008af5 26%,rgba(0,138,245,0) 106%); border-radius:8px; padding:10px 8px; margin-bottom:8px;">
+                <div style="height:8px; background:rgba(255,255,255,0.9); border-radius:3px; margin-bottom:4px; width:55%;"></div>
+                <div style="height:5px; background:rgba(255,255,255,0.6); border-radius:3px; width:40%;"></div>
+              </div>
+              <div style="background:#fff; border-radius:8px; padding:6px;">
+                <div style="height:5px; background:#008af5; border-radius:3px; margin-bottom:6px; width:50%;"></div>
+                <div style="background:#f3f6f8; border-radius:4px; padding:4px 6px; margin-bottom:3px;">
+                  <div style="height:3px; background:#172a46; opacity:0.4; border-radius:2px; margin-bottom:2px;"></div>
+                  <div style="height:2px; background:#172a46; opacity:0.2; border-radius:2px;"></div>
+                </div>
+                <div style="background:#f3f6f8; border-radius:4px; padding:4px 6px;">
+                  <div style="height:3px; background:#172a46; opacity:0.4; border-radius:2px; margin-bottom:2px;"></div>
+                  <div style="height:2px; background:#172a46; opacity:0.2; border-radius:2px;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="template-card-info">
+            <div class="template-card-name">Шаблон 2</div>
+            <div class="template-card-desc">Современный с карточками и синим акцентом</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Модальное окно подтверждения -->
+  <div x-show="showBackModal" class="modal-overlay" @click.self="showBackModal = false">
+    <div class="modal-box">
+      <div class="modal-title">Вернуться к выбору шаблона?</div>
+      <div class="modal-subtitle">Все введённые данные будут потеряны.</div>
+      <div class="modal-actions">
+        <button @click="showBackModal = false" class="modal-btn-cancel">Остаться</button>
+        <button @click="selectedTemplate = 0; showBackModal = false" class="modal-btn-confirm">Вернуться</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="builder-layout" x-show="selectedTemplate">
+
+    <div class="form-panel">
+      <div class="form-panel-inner">
+
+      <!-- Хлебные крошки -->
+      <div style="display:flex; align-items:center; gap:8px; margin-bottom:20px; font-family:'Museo Sans Cyrl',sans-serif; font-size:13px;">
+        <span @click="showBackModal = true" style="color:#008af5; cursor:pointer;">Выбор шаблона</span>
+        <span style="color:#959dac;">→</span>
+        <span style="color:#959dac;" x-text="'Шаблон ' + selectedTemplate"></span>
+      </div>
+
+      <div class="form-header">
+        <h2>Заполните резюме</h2>
+        <button class="export-btn" @click="exportPDF()" style="width:auto; padding: 12px 32px; margin:0;">Скачать PDF</button>
+      </div>
+
+      <div class="form-section">
+        <div class="section-toggle" @click="showMain = !showMain">
+          <div class="form-section-title" style="margin:0">Основное</div>
+          <div class="section-toggle-arrow" :class="showMain ? 'open' : ''"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#334969" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+        </div>
+        <div x-show="showMain" x-collapse>
+        <div class="form-row">
+          <div class="photo-block">
+            <div class="photo-upload" x-show="!photoSrc" @click="$refs.photoInput.click()">
+              <span>+ загрузить фото</span>
+            </div>
+            <div class="photo-uploaded" x-show="photoSrc">
+              <img :src="photoSrc" class="photo-preview-round">
+              <div class="photo-actions">
+                <button class="photo-action-btn" @click="$refs.photoInput.click()">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#334969" stroke-width="2">
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                  </svg>
+                </button>
+                <button class="photo-action-btn" @click="photoSrc = null; $refs.photoInput.value = ''">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#e53935" stroke-width="2">
+                    <polyline points="3 6 5 6 21 6"/>
+                    <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+                    <path d="M10 11v6M14 11v6"/>
+                    <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <input type="file" x-ref="photoInput" accept="image/*" style="display:none"
+              @change="
+                const file = $event.target.files[0];
+                photoError = '';
+                if (file) {
+                  const allowed = ['image/jpeg', 'image/png', 'image/webp'];
+                  if (!allowed.includes(file.type)) {
+                    photoError = 'Допустимые форматы: JPG, PNG, WEBP';
+                    $refs.photoInput.value = '';
+                  } else if (file.size > 5 * 1024 * 1024) {
+                    photoError = 'Файл не должен превышать 5 МБ';
+                    $refs.photoInput.value = '';
+                  } else {
+                    const reader = new FileReader();
+                    reader.onload = e => photoSrc = e.target.result;
+                    reader.readAsDataURL(file);
+                  }
+                }
+              ">
+          <div style="display:flex; align-items:center; justify-content:center; gap:6px; margin-top:8px; margin-bottom:4px;">
+            <span style="font-family:'Museo Sans Cyrl',sans-serif; font-size:11px; font-weight:500; color:#959dac; white-space:nowrap;">Показать фото</span>
+            <div class="switch-wrap" @click="showPhoto = !showPhoto" :class="showPhoto ? 'switch-on' : ''"><div class="switch-thumb"></div></div>
+          </div>
+          </div>
+          <div x-show="photoError" style="font-family:'Museo Sans Cyrl',sans-serif; font-size:12px; color:#e53935; margin-top:8px;" x-text="photoError"></div>
+          <div class="form-col">
+            <div class="input-wrap">
+              <span class="input-label">Должность</span>
+              <input type="text" x-model="jobTitle" placeholder="Введи текст">
+              <button class="clear-btn" @click="jobTitle = ''" x-show="jobTitle">✕</button>
+            </div>
+            <div class="input-wrap">
+              <span class="input-label">Имя Фамилия</span>
+              <input type="text" x-model="fullName" placeholder="Введи текст">
+              <button class="clear-btn" @click="fullName = ''" x-show="fullName">✕</button>
+            </div>
+            <div>
+              <div class="color-label">Цвет боковой панели</div>
+              <div class="color-picker">
+                <div class="color-swatch" style="background: #FCE5C2" :class="{ active: bgColor === '#FCE5C2' }" @click="bgColor = '#FCE5C2'"></div>
+                <div class="color-swatch" style="background: #C8E7C6" :class="{ active: bgColor === '#C8E7C6' }" @click="bgColor = '#C8E7C6'"></div>
+                <div class="color-swatch" style="background: #CBEEFF" :class="{ active: bgColor === '#CBEEFF' }" @click="bgColor = '#CBEEFF'"></div>
+                <div class="color-swatch" style="background: #FEECFF" :class="{ active: bgColor === '#FEECFF' }" @click="bgColor = '#FEECFF'"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="section-toggle" @click="showLogoSection = !showLogoSection">
+          <div class="form-section-title" style="margin:0">Логотип</div>
+          <div class="section-toggle-arrow" :class="showLogoSection ? 'open' : ''"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#334969" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+        </div>
+        <div x-show="showLogoSection" x-collapse>
+        <div style="display:flex; flex-direction:column; gap:12px;">
+          <div style="display:flex; align-items:center; justify-content:space-between;">
+            <span style="font-family:'Museo Sans Cyrl',sans-serif; font-size:14px; color:#334969;">Верхний логотип</span>
+            <div style="display:flex; gap:8px; align-items:center;">
+              <button class="photo-action-btn" @click="$refs.logoInput.click()" title="Заменить">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#334969" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              </button>
+              <button class="photo-action-btn" @click="logoSrc = null; $refs.logoInput.value=''" x-show="logoSrc" title="Сбросить">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#959dac" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+              </button>
+              <div class="switch-wrap" @click="showLogo = !showLogo" :class="showLogo ? 'switch-on' : ''"><div class="switch-thumb"></div></div>
+            </div>
+          </div>
+          <div style="display:flex; align-items:center; justify-content:space-between;">
+            <span style="font-family:'Museo Sans Cyrl',sans-serif; font-size:14px; color:#334969;">Нижний логотип</span>
+            <div style="display:flex; gap:8px; align-items:center;">
+              <button class="photo-action-btn" @click="$refs.logoBottomInput.click()" title="Заменить">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#334969" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              </button>
+              <button class="photo-action-btn" @click="logoBottomSrc = null; $refs.logoBottomInput.value=''" x-show="logoBottomSrc" title="Сбросить">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#959dac" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+              </button>
+              <div class="switch-wrap" @click="showLogoBottom = !showLogoBottom" :class="showLogoBottom ? 'switch-on' : ''"><div class="switch-thumb"></div></div>
+            </div>
+          </div>
+        </div>
+        <input type="file" x-ref="logoInput" accept="image/*" style="display:none" @change="const f=$event.target.files[0]; if(f){const r=new FileReader();r.onload=e=>logoSrc=e.target.result;r.readAsDataURL(f)}">
+        <input type="file" x-ref="logoBottomInput" accept="image/*" style="display:none" @change="const f=$event.target.files[0]; if(f){const r=new FileReader();r.onload=e=>logoBottomSrc=e.target.result;r.readAsDataURL(f)}">
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="section-toggle" @click="showSkillsEdu = !showSkillsEdu">
+          <div class="form-section-title" style="margin:0">Навыки и образование</div>
+          <div class="section-toggle-arrow" :class="showSkillsEdu ? 'open' : ''"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#334969" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+        </div>
+        <div x-show="showSkillsEdu" x-collapse>
+        <div style="display:flex; flex-direction:column; gap:25px;">
+          <div style="display:flex; gap:10px; align-items:flex-start;">
+            <div class="input-wrap" style="flex:1; min-width:0;">
+              <span class="input-label">Навыки и технологии</span>
+              <textarea x-show="showSkills" x-model="skills" placeholder="Введи текст" @input="$event.target.style.height = '96px'; $event.target.style.height = $event.target.scrollHeight + 'px'"></textarea>
+              <button class="clear-btn" @click="skills = ''; $event.target.previousElementSibling.style.height = '96px'" x-show="skills">✕</button>
+            </div>
+            <div style="display:flex; height:54px; align-items:center;">
+              <button @click="showSkills = !showSkills" class="toggle-btn" style="position:static; transform:none;">
+                <svg x-show="showSkills" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" fill="#959dac"/>
+                </svg>
+                <svg x-show="!showSkills" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <path d="M12 6.5c2.76 0 5 2.24 5 5 0 .51-.1 1-.24 1.46l2.92 2.92c1.51-1.26 2.7-2.89 3.43-4.77-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-3.98.7l2.16 2.16c.46-.14.95-.24 1.46-.24zM2.71 3.16a1 1 0 0 0 0 1.41l1.97 1.97A11.892 11.892 0 0 0 1 11.5c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l2.62 2.62a1 1 0 1 0 1.41-1.41L4.13 3.16a1 1 0 0 0-1.42 0zM12 16.5c-2.76 0-5-2.24-5-5 0-.77.18-1.5.49-2.14l1.57 1.57c-.03.18-.06.37-.06.57 0 1.66 1.34 3 3 3 .2 0 .38-.03.57-.07l1.57 1.57c-.64.32-1.37.5-2.14.5zm2.97-5.33a2.97 2.97 0 0 0-2.64-2.64l2.64 2.64z" fill="#959dac"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+          <div style="display:flex; gap:10px; align-items:flex-start;">
+            <div class="input-wrap" style="flex:1; min-width:0;">
+              <span class="input-label">Образование</span>
+              <textarea x-show="showEducation" x-model="education" placeholder="Введи текст" @input="$event.target.style.height = '96px'; $event.target.style.height = $event.target.scrollHeight + 'px'"></textarea>
+              <button class="clear-btn" @click="education = ''; $event.target.previousElementSibling.style.height = '96px'" x-show="education">✕</button>
+            </div>
+            <div style="display:flex; height:54px; align-items:center;">
+              <button @click="showEducation = !showEducation" class="toggle-btn" style="position:static; transform:none;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" fill="#959dac"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="section-toggle" @click="showLanguages = !showLanguages">
+          <div class="form-section-title" style="margin:0">Языки</div>
+          <div class="section-toggle-arrow" :class="showLanguages ? 'open' : ''"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#334969" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+        </div>
+        <div x-show="showLanguages" x-collapse>
+          <template x-for="(lang, i) in languages" :key="i">
+            <div class="language-block">
+              <template x-if="lang.editing">
+                <div class="language-edit">
+                  <div class="language-edit-row">
+                    <div class="input-wrap" style="flex:1">
+                      <span class="input-label">Язык</span>
+                      <input type="text" x-model="lang.name" placeholder="Введи текст">
+                    </div>
+                    <div class="input-wrap" style="flex:1">
+                      <span class="input-label">Уровень</span>
+                      <select x-model="lang.level" class="lang-select">
+                        <option value="" disabled selected>Сделайте выбор</option>
+                        <template x-for="lvl in languageLevels" :key="lvl">
+                          <option :value="lvl" x-text="lvl"></option>
+                        </template>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="language-edit-actions">
+                    <button class="lang-delete-btn" @click="removeLanguage(i)">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#959dac" stroke-width="1.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+                    </button>
+                    <button class="lang-confirm-btn" @click="confirmLanguage(i)">Готово</button>
+                  </div>
+                </div>
+              </template>
+              <template x-if="!lang.editing">
+                <div class="language-tag" @click="lang.editing = true">
+                  <span x-text="lang.name + (lang.level ? ' — ' + lang.level : '')"></span>
+                  <button @click.stop="removeLanguage(i)" class="lang-tag-delete">✕</button>
+                </div>
+              </template>
+            </div>
+          </template>
+          <button @click="addLanguage()" class="add-project-btn" style="margin-top:8px">+ Добавить язык</button>
+        </div>
+      </div>
+
+
+      <div class="form-section">
+        <div class="section-toggle" @click="showContactsSection = !showContactsSection">
+          <div class="form-section-title" style="margin:0">Контакты</div>
+          <div style="display:flex; align-items:center; gap:8px;" @click.stop>
+            <span style="font-family:'Museo Sans Cyrl',sans-serif; font-size:12px; font-weight:500; color:#959dac;">Показать контакты</span>
+            <div class="switch-wrap" @click="showContactsBlock = !showContactsBlock" :class="showContactsBlock ? 'switch-on' : ''"><div class="switch-thumb"></div></div>
+            <div class="section-toggle-arrow" :class="showContactsSection ? 'open' : ''" @click="showContactsSection = !showContactsSection"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#334969" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+          </div>
+        </div>
+        <div x-show="showContactsSection" x-collapse>
+          <div style="display:flex; flex-direction:column; gap:25px;">
+
+            <div style="display:flex; gap:12px; align-items:flex-start;">
+              <div style="display:flex; height:54px; align-items:center; flex-shrink:0;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#334969" stroke-width="1.5"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg>
+              </div>
+              <div class="input-wrap" style="flex:1; min-width:0;">
+                <span class="input-label">Email</span>
+                <input type="text" x-model="contactEmail" placeholder="Введи текст">
+                <button class="clear-btn" @click="contactEmail = ''" x-show="contactEmail">✕</button>
+              </div>
+              <div style="display:flex; height:54px; align-items:center;">
+                <button @click="showContactEmail = !showContactEmail" class="toggle-btn" style="position:static; transform:none;">
+                  <svg x-show="showContactEmail" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" fill="#959dac"/></svg>
+                  <svg x-show="!showContactEmail" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 6.5c2.76 0 5 2.24 5 5 0 .51-.1 1-.24 1.46l2.92 2.92c1.51-1.26 2.7-2.89 3.43-4.77-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-3.98.7l2.16 2.16c.46-.14.95-.24 1.46-.24zM2.71 3.16a1 1 0 0 0 0 1.41l1.97 1.97A11.892 11.892 0 0 0 1 11.5c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l2.62 2.62a1 1 0 1 0 1.41-1.41L4.13 3.16a1 1 0 0 0-1.42 0zM12 16.5c-2.76 0-5-2.24-5-5 0-.77.18-1.5.49-2.14l1.57 1.57c-.03.18-.06.37-.06.57 0 1.66 1.34 3 3 3 .2 0 .38-.03.57-.07l1.57 1.57c-.64.32-1.37.5-2.14.5zm2.97-5.33a2.97 2.97 0 0 0-2.64-2.64l2.64 2.64z" fill="#959dac"/></svg>
+                </button>
+              </div>
+            </div>
+
+            <div style="display:flex; gap:12px; align-items:flex-start;">
+              <div style="display:flex; height:54px; align-items:center; flex-shrink:0;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#334969" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+              </div>
+              <div class="input-wrap" style="flex:1; min-width:0;">
+                <span class="input-label">Сайт</span>
+                <input type="text" x-model="contactSite" placeholder="Введи текст">
+                <button class="clear-btn" @click="contactSite = ''" x-show="contactSite">✕</button>
+              </div>
+              <div style="display:flex; height:54px; align-items:center;">
+                <button @click="showContactSite = !showContactSite" class="toggle-btn" style="position:static; transform:none;">
+                  <svg x-show="showContactSite" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" fill="#959dac"/></svg>
+                  <svg x-show="!showContactSite" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 6.5c2.76 0 5 2.24 5 5 0 .51-.1 1-.24 1.46l2.92 2.92c1.51-1.26 2.7-2.89 3.43-4.77-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-3.98.7l2.16 2.16c.46-.14.95-.24 1.46-.24zM2.71 3.16a1 1 0 0 0 0 1.41l1.97 1.97A11.892 11.892 0 0 0 1 11.5c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l2.62 2.62a1 1 0 1 0 1.41-1.41L4.13 3.16a1 1 0 0 0-1.42 0zM12 16.5c-2.76 0-5-2.24-5-5 0-.77.18-1.5.49-2.14l1.57 1.57c-.03.18-.06.37-.06.57 0 1.66 1.34 3 3 3 .2 0 .38-.03.57-.07l1.57 1.57c-.64.32-1.37.5-2.14.5zm2.97-5.33a2.97 2.97 0 0 0-2.64-2.64l2.64 2.64z" fill="#959dac"/></svg>
+                </button>
+              </div>
+            </div>
+
+            <div style="display:flex; gap:12px; align-items:flex-start;">
+              <div style="display:flex; height:54px; align-items:center; flex-shrink:0;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#334969" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.78a16 16 0 0 0 6.29 6.29l1.62-1.62a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              </div>
+              <div class="input-wrap" style="flex:1; min-width:0;">
+                <span class="input-label">Телефон</span>
+                <input type="text" x-model="contactPhone" placeholder="Введи текст">
+                <button class="clear-btn" @click="contactPhone = ''" x-show="contactPhone">✕</button>
+              </div>
+              <div style="display:flex; height:54px; align-items:center;">
+                <button @click="showContactPhone = !showContactPhone" class="toggle-btn" style="position:static; transform:none;">
+                  <svg x-show="showContactPhone" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" fill="#959dac"/></svg>
+                  <svg x-show="!showContactPhone" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 6.5c2.76 0 5 2.24 5 5 0 .51-.1 1-.24 1.46l2.92 2.92c1.51-1.26 2.7-2.89 3.43-4.77-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-3.98.7l2.16 2.16c.46-.14.95-.24 1.46-.24zM2.71 3.16a1 1 0 0 0 0 1.41l1.97 1.97A11.892 11.892 0 0 0 1 11.5c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l2.62 2.62a1 1 0 1 0 1.41-1.41L4.13 3.16a1 1 0 0 0-1.42 0zM12 16.5c-2.76 0-5-2.24-5-5 0-.77.18-1.5.49-2.14l1.57 1.57c-.03.18-.06.37-.06.57 0 1.66 1.34 3 3 3 .2 0 .38-.03.57-.07l1.57 1.57c-.64.32-1.37.5-2.14.5zm2.97-5.33a2.97 2.97 0 0 0-2.64-2.64l2.64 2.64z" fill="#959dac"/></svg>
+                </button>
+              </div>
+            </div>
+
+          </div>
+          <button @click="resetContacts()" style="margin-top:16px; background:none; border:none; cursor:pointer; font-family:'Museo Sans Cyrl',sans-serif; font-size:12px; font-weight:700; color:#008af5; padding:0;">По умолчанию</button>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="section-toggle" @click="showProjects = !showProjects">
+          <div class="form-section-title" style="margin:0">Проектный опыт</div>
+          <div class="section-toggle-arrow" :class="showProjects ? 'open' : ''"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#334969" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+        </div>
+        <div x-show="showProjects" x-collapse>
+        <template x-for="(project, i) in projects" :key="i">
+          <div class="project-form-block">
+            <div class="project-form-header">
+              <span class="project-form-title" x-text="'Проект ' + (i+1)"></span>
+              <button @click="removeProject(i)" class="project-delete-btn">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#959dac" stroke-width="1.5">
+                  <polyline points="3 6 5 6 21 6"/>
+                  <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+                  <path d="M10 11v6M14 11v6"/>
+                  <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+                </svg>
+              </button>
+            </div>
+            <div class="form-row" style="gap:12px;">
+              <div class="input-wrap" style="flex:1; min-width:0;">
+                <span class="input-label">Название проекта</span>
+                <input type="text" x-model="project.company" placeholder="Введи текст">
+                <button class="clear-btn" @click="project.company = ''" x-show="project.company">✕</button>
+              </div>
+              <div class="input-wrap" style="flex:1; min-width:0;">
+                <span class="input-label">Должность</span>
+                <input type="text" x-model="project.role" placeholder="Введи текст">
+                <button class="clear-btn" @click="project.role = ''" x-show="project.role">✕</button>
+              </div>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:0; align-items:stretch;">
+              <div class="form-row" style="gap:12px; width:100%;">
+                <div class="input-wrap" style="flex:1; min-width:0;">
+                  <span class="input-label">Начало работы</span>
+                  <div class="date-input-wrap">
+                    <input type="text" x-model="project.periodStart" placeholder="ММ.ГГГГ"
+                      x-init="flatpickr($el, {
+                        locale: 'ru',
+                        plugins: [new monthSelectPlugin({ shorthand: true, dateFormat: 'm.Y', altFormat: 'm.Y' })],
+                        onChange: (dates, dateStr) => { project.periodStart = dateStr }
+                      })">
+                    <svg class="calendar-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#959dac" stroke-width="1.5">
+                      <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+                    </svg>
+                  </div>
+                  <button class="clear-btn" style="top:50%; transform:translateY(-50%);" @click="project.periodStart = ''; $el.previousElementSibling.querySelector('input')._flatpickr.clear()" x-show="project.periodStart">✕</button>
+                </div>
+                <div class="input-wrap" style="flex:1; min-width:0;">
+                  <span class="input-label">Окончание работы</span>
+                  <div class="date-input-wrap">
+                    <input type="text" x-model="project.periodEnd"
+                      :disabled="project.isCurrent"
+                      :placeholder="project.isCurrent ? 'По настоящее время' : 'ММ.ГГГГ'"
+                      x-init="flatpickr($el, {
+                        locale: 'ru',
+                        plugins: [new monthSelectPlugin({ shorthand: true, dateFormat: 'm.Y', altFormat: 'm.Y' })],
+                        onChange: (dates, dateStr) => { project.periodEnd = dateStr }
+                      })">
+                    <svg class="calendar-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#959dac" stroke-width="1.5">
+                      <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+                    </svg>
+                  </div>
+                  <button class="clear-btn" style="top:50%; transform:translateY(-50%);" @click="project.periodEnd = ''; $el.previousElementSibling.querySelector('input')._flatpickr.clear()" x-show="project.periodEnd && !project.isCurrent">✕</button>
+                </div>
+              </div>
+              <div style="display:flex; gap:12px; align-items:center; justify-content:flex-end; margin-bottom:24px;">
+                <span style="font-family:'Museo Sans Cyrl',sans-serif; font-size:12px; font-weight:500; color:#959dac;">По настоящее время</span>
+                <div class="switch-wrap" @click="project.isCurrent = !project.isCurrent; if (project.isCurrent) { project.periodEnd = ''; }" :class="project.isCurrent ? 'switch-on' : ''">
+                  <div class="switch-thumb"></div>
+                </div>
+              </div>
+            </div>
+            <div class="input-wrap">
+              <span class="input-label">Обязанности</span>
+              <textarea x-model="project.description" placeholder="Введи текст"
+                @input="$event.target.style.height = '96px'; $event.target.style.height = $event.target.scrollHeight + 'px'"></textarea>
+              <button class="clear-btn" @click="project.description = ''; $el.closest('.input-wrap').querySelector('textarea').style.height = '96px'" x-show="project.description">✕</button>
+            </div>
+          </div>
+        </template>
+        <button @click="addProject()" class="add-project-btn">+ Добавить проект</button>
+        </div>
+      </div>
+      </div><!-- /form-panel-inner -->
+      <div class="form-footer">
+        <span>Что-то сломалось или есть идеи, напиши в </span><a href="https://t.me/sabaisabay" target="_blank" style="color:#008af5; text-decoration:none;">Telegram</a>
+      </div>
+    </div>
+
+    <div class="preview-panel">
+      <div class="preview-scaler">
+      <div class="page" x-show="selectedTemplate === 1" style="display:none;" x-effect="$el.style.display = selectedTemplate === 1 ? 'flex' : 'none'">
+        <aside class="left-col" :style="'background: ' + bgColor">
+          <div class="logo" x-show="showLogo"><img :src="logoSrc || 'logo.png'" alt="Логотип"></div>
+          <div class="photo-wrap" x-show="showPhoto">
+            <img x-show="photoSrc" :src="photoSrc" class="photo">
+            <div x-show="!photoSrc" class="photo-placeholder">
+              <img src="placeholder-person.png" alt="Фото">
+            </div>
+          </div>
+          <div class="sidebar-block" x-show="showSkills">
+            <div class="sidebar-title">Навыки,<br>технологии</div>
+            <div class="sidebar-line"></div>
+            <div class="sidebar-content" style="white-space:pre-line" x-text="skills || 'Текст навыков'"></div>
+          </div>
+          <div class="sidebar-block" x-show="showEducation">
+            <div class="sidebar-title">Образование</div>
+            <div class="sidebar-line"></div>
+            <div class="sidebar-content" style="white-space:pre-line" x-text="education || 'Информация об учебном заведении'"></div>
+          </div>
+          <div class="sidebar-block" x-show="languages.filter(l => !l.editing && l.name).length > 0">
+            <div class="sidebar-title">Языки</div>
+            <div class="sidebar-line"></div>
+            <div class="sidebar-content">
+              <template x-for="(lang, i) in languages.filter(l => !l.editing && l.name)" :key="i">
+                <div x-text="lang.name + (lang.level ? ' — ' + lang.level : '')"></div>
+              </template>
+            </div>
+          </div>
+          <div class="sidebar-block" x-show="showContactsBlock && (showContactEmail || showContactSite || showContactPhone)" style="margin-top:auto;">
+            <div class="sidebar-title">Контакты</div>
+            <div class="sidebar-line"></div>
+            <div style="display:flex; flex-direction:column; gap:6px;">
+              <div x-show="showContactEmail && contactEmail" style="display:table; width:100%;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#334969" stroke-width="1.5" style="display:inline; vertical-align:middle; margin-right:6px;"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg><span style="font-family:'Raleway',sans-serif; font-size:13px; color:#334969; line-height:1.4; vertical-align:middle;" x-text="contactEmail"></span>
+              </div>
+              <div x-show="showContactSite && contactSite" style="display:table; width:100%;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#334969" stroke-width="1.5" style="display:inline; vertical-align:middle; margin-right:6px;"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg><span style="font-family:'Raleway',sans-serif; font-size:13px; color:#334969; line-height:1.4; vertical-align:middle;" x-text="contactSite"></span>
+              </div>
+              <div x-show="showContactPhone && contactPhone" style="display:table; width:100%;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#334969" stroke-width="1.5" style="display:inline; vertical-align:middle; margin-right:6px;"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.78a16 16 0 0 0 6.29 6.29l1.62-1.62a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg><span style="font-family:'Raleway',sans-serif; font-size:13px; color:#334969; line-height:1.4; vertical-align:middle;" x-text="contactPhone"></span>
+              </div>
+            </div>
+          </div>
+        </aside>
+        <img src="hero-image.svg" class="deco-hero">
+        <div class="right-col" style="padding-bottom: 100px;">
+          <div class="name-block">
+            <div class="job-title" x-text="jobTitle || 'Должность'"></div>
+            <div class="full-name" x-text="fullName || 'Имя Фамилия'"></div>
+          </div>
+          <div class="experience-section">
+            <div class="section-header">Проектный опыт</div>
+            <div class="section-line"></div>
+          </div>
+          <div class="timeline">
+            <div class="timeline-line"></div>
+            <template x-for="(project, i) in projects" :key="i">
+              <div class="project">
+                <div class="project-dot"></div>
+                <div class="project-meta">
+                  <div class="project-company" x-text="project.company || 'Название проекта'"></div>
+                  <div class="project-period" x-text="project.isCurrent ? (project.periodStart ? formatDate(project.periodStart) + ' — По настоящее время' : 'месяц.год — По настоящее время') : (project.periodStart || project.periodEnd ? formatDate(project.periodStart) + ' — ' + formatDate(project.periodEnd) : 'месяц.год — месяц.год')"></div>
+                </div>
+                <div class="project-content">
+                  <div class="project-role" x-text="project.role || 'Должность на проекте'"></div>
+                  <div class="project-field" x-text="project.description || 'Текст описания'"></div>
+                </div>
+              </div>
+            </template>
+          </div>
+          <img x-show="showLogoBottom" :src="logoBottomSrc || 'logo-bottom.svg'" class="contacts-logo" alt="Логотип">
+        </div>
+      </div>
+      </div>
+      </div>
+
+      <div class="preview-scaler" x-show="selectedTemplate === 2">
+      <div class="page--t2">
+
+        <!-- Левая колонка -->
+        <div class="left-col-t2">
+          <div class="logo-t2" x-show="showLogo"><img :src="logoSrc || 'logo.png'" alt="Логотип"></div>
+          <div class="photo-wrap-t2" x-show="showPhoto">
+            <img x-show="photoSrc" :src="photoSrc" class="photo-t2">
+            <div x-show="!photoSrc" class="photo-placeholder-t2">
+              <img src="placeholder-person.png" alt="Фото">
+            </div>
+          </div>
+          <!-- Карточки навыки/образование/языки -->
+          <div class="sidebar-cards-t2">
+            <div class="sidebar-card-t2" x-show="showSkills">
+              <div class="sidebar-card-title-t2">Навыки, технологии</div>
+              <div class="sidebar-card-content-t2" style="white-space:pre-line" x-text="skills || 'Текст навыков'"></div>
+            </div>
+            <div class="sidebar-card-t2" x-show="showEducation">
+              <div class="sidebar-card-title-t2">Образование</div>
+              <div class="sidebar-card-content-t2" style="white-space:pre-line" x-text="education || 'Информация об учебном заведении'"></div>
+            </div>
+            <div class="sidebar-card-t2" x-show="languages.filter(l => !l.editing && l.name).length > 0">
+              <div class="sidebar-card-title-t2">Языки</div>
+              <div class="sidebar-card-content-t2">
+                <template x-for="(lang, i) in languages.filter(l => !l.editing && l.name)" :key="i">
+                  <div x-text="lang.name + (lang.level ? ' — ' + lang.level : '')"></div>
+                </template>
+              </div>
+            </div>
+          </div>
+          <!-- Контакты — отдельная карточка снизу -->
+          <div class="sidebar-contacts-t2" x-show="showContactsBlock && (showContactEmail || showContactSite || showContactPhone)">
+            <div class="sidebar-contacts-title-t2">Контакты</div>
+            <div style="display:flex; flex-direction:column; gap:8px;">
+              <div x-show="showContactEmail && contactEmail" style="display:flex; align-items:center; gap:8px;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#334969" stroke-width="1.5"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg>
+                <span style="font-family:'Raleway',sans-serif; font-size:14px; color:#334969;" x-text="contactEmail"></span>
+              </div>
+              <div x-show="showContactSite && contactSite" style="display:flex; align-items:center; gap:8px;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#334969" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                <span style="font-family:'Raleway',sans-serif; font-size:14px; color:#334969;" x-text="contactSite"></span>
+              </div>
+              <div x-show="showContactPhone && contactPhone" style="display:flex; align-items:center; gap:8px;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#334969" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.78a16 16 0 0 0 6.29 6.29l1.62-1.62a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                <span style="font-family:'Raleway',sans-serif; font-size:14px; color:#334969;" x-text="contactPhone"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Правая колонка -->
+        <div class="right-col-t2">
+          <div class="name-card-t2">
+            <div class="name-card-text-t2">
+              <div class="job-title-t2" x-text="jobTitle || 'Должность'"></div>
+              <div class="full-name-t2" x-text="fullName || 'Имя Фамилия'"></div>
+            </div>
+          </div>
+          <div class="projects-card-t2">
+            <div class="projects-title-t2">Проектный опыт</div>
+            <template x-for="(project, i) in projects" :key="i">
+              <div class="project-row-t2">
+                <div class="project-meta-t2">
+                  <div class="project-company-t2" x-text="project.company || 'Название проекта'"></div>
+                  <div class="project-period-t2" x-text="project.isCurrent ? (project.periodStart ? formatDate(project.periodStart) + ' — По настоящее время' : 'месяц.год — По настоящее время') : (project.periodStart || project.periodEnd ? formatDate(project.periodStart) + ' — ' + formatDate(project.periodEnd) : 'месяц.год — месяц.год')"></div>
+                </div>
+                <div class="project-content-t2">
+                  <div class="project-role-t2" x-text="project.role || 'Должность на проекте'"></div>
+                  <div class="project-desc-t2" x-text="project.description || 'Текст описания'"></div>
+                </div>
+              </div>
+            </template>
+          </div>
+        </div>
+
+        <!-- Слоган -->
+        <div class="slogan-t2">ДОВЕРИЕ • ЭНЕРГИЯ • ЭКСПЕРТИЗА</div>
+
+        <!-- Нижний логотип -->
+        <img x-show="showLogoBottom" :src="logoBottomSrc || 'logo-bottom.svg'" class="logo-bottom-t2" alt="Логотип">
+
+      </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
