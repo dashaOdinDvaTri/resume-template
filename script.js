@@ -49,6 +49,22 @@ function resumeData() {
     removeProject(i) {
       this.projects.splice(i, 1)
     },
+    init(){
+      const saved = localStorage.getItem('t1data');
+      if(saved){
+        try {
+          const d = JSON.parse(saved);
+          const keys = ['fullName','jobTitle','skills','education','bgColor','contactEmail','contactSite','contactPhone','showSkills','showEducation','showContactEmail','showContactSite','showContactPhone','showContactsBlock','showPhoto','showLogo','showLogoBottom','languages','projects'];
+          keys.forEach(k => { if(d[k] !== undefined) this[k] = d[k]; });
+        } catch(e){}
+      }
+      this.$watch('$data', () => {
+        const keys = ['fullName','jobTitle','skills','education','bgColor','contactEmail','contactSite','contactPhone','showSkills','showEducation','showContactEmail','showContactSite','showContactPhone','showContactsBlock','showPhoto','showLogo','showLogoBottom','languages','projects'];
+        const toSave = {};
+        keys.forEach(k => toSave[k] = this[k]);
+        localStorage.setItem('t1data', JSON.stringify(toSave));
+      }, {deep: true});
+    },
     formatDate(dateStr) {
       if (!dateStr) return ''
       return dateStr

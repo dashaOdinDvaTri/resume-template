@@ -374,7 +374,25 @@ function t2Data(){
     languageLevels:['Новичок','Средний','Хороший','Очень хороший','Свободно владею','A1','A2','B1','B2','C1','C2'],
     projects:[{company:'',periodStart:'',periodEnd:'',isCurrent:false,role:'',description:''}],
 
-    init(){this.$nextTick(()=>this.initScaler())},
+    init(){
+      // Загружаем сохранённые данные
+      const saved = localStorage.getItem('t2data');
+      if(saved){
+        try {
+          const d = JSON.parse(saved);
+          const keys = ['fullName','jobTitle','skills','education','bgColor','contactEmail','contactSite','contactPhone','showSkills','showEducation','showContactEmail','showContactSite','showContactPhone','showContactsBlock','showPhoto','showLogo','showLogoBottom','languages','projects'];
+          keys.forEach(k => { if(d[k] !== undefined) this[k] = d[k]; });
+        } catch(e){}
+      }
+      this.$nextTick(()=>this.initScaler());
+      // Сохраняем при каждом изменении
+      this.$watch('$data', (val) => {
+        const keys = ['fullName','jobTitle','skills','education','bgColor','contactEmail','contactSite','contactPhone','showSkills','showEducation','showContactEmail','showContactSite','showContactPhone','showContactsBlock','showPhoto','showLogo','showLogoBottom','languages','projects'];
+        const toSave = {};
+        keys.forEach(k => toSave[k] = this[k]);
+        localStorage.setItem('t2data', JSON.stringify(toSave));
+      }, {deep: true});
+    },
 
     initScaler(){
       const update=()=>{
