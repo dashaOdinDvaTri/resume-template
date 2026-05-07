@@ -128,7 +128,7 @@
       <div class="form-header">
         <h2>Заполните резюме</h2>
         <div style="display:flex;gap:8px;align-items:center;">
-        <button @click="loadDraft()" style="padding:10px 16px;border:1px solid #d0d5e0;border-radius:100px;background:#fff;font-family:'Museo Sans Cyrl',sans-serif;font-size:14px;color:#334969;cursor:pointer;">📂 Загрузить</button>
+        <button @click="newResume()" style="padding:10px 16px;border:1px solid #e53935;border-radius:100px;background:#fff;font-family:'Museo Sans Cyrl',sans-serif;font-size:14px;color:#e53935;cursor:pointer;">🗑 Новое</button><button @click="loadDraft()" style="padding:10px 16px;border:1px solid #d0d5e0;border-radius:100px;background:#fff;font-family:'Museo Sans Cyrl',sans-serif;font-size:14px;color:#334969;cursor:pointer;">📂 Загрузить</button>
         <button @click="saveDraft()" style="padding:10px 16px;border:1px solid #008af5;border-radius:100px;background:#fff;font-family:'Museo Sans Cyrl',sans-serif;font-size:14px;color:#008af5;cursor:pointer;">💾 Сохранить</button>
         <button class="export-btn" @click="exportPDF()">Скачать PDF</button>
       </div>
@@ -412,6 +412,18 @@ function t2Data(){
       window.addEventListener('resize',update);
     },
 
+    newResume(){
+      if(!confirm('Начать новое резюме? Все данные будут очищены.')) return;
+      localStorage.removeItem('t2data');
+      this.fullName='';this.jobTitle='';this.skills='';this.education='';
+      this.bgColor='#E9EFF5';this.contactEmail='info@digitalleague.ru';
+      this.contactSite='www.digitalleague.ru';this.contactPhone='+7 495 790 90 73';
+      this.showSkills=true;this.showEducation=true;this.showContactEmail=true;
+      this.showContactSite=true;this.showContactPhone=true;this.showContactsBlock=true;
+      this.showPhoto=true;this.showLogo=true;this.showLogoBottom=true;
+      this.photoSrc=null;this.logoSrc=null;this.logoBottomSrc=null;
+      this.languages=[];this.projects=[{company:'',organization:'',periodStart:'',periodEnd:'',isCurrent:false,role:'',description:''}];
+    },
     saveDraft(){
       const keys=['fullName','jobTitle','skills','education','bgColor','contactEmail','contactSite','contactPhone','showSkills','showEducation','showContactEmail','showContactSite','showContactPhone','showContactsBlock','showPhoto','showLogo','showLogoBottom','languages','projects'];
       const data={};keys.forEach(k=>data[k]=this[k]);

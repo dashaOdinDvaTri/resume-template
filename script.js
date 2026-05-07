@@ -87,6 +87,18 @@ function resumeData() {
       window.removeEventListener('resize', window._scalerUpdate)
       window.addEventListener('resize', window._scalerUpdate)
     },
+    newResume() {
+      if(!confirm('Начать новое резюме? Все данные будут очищены.')) return;
+      localStorage.removeItem('t1data');
+      this.fullName=''; this.jobTitle=''; this.skills=''; this.education='';
+      this.bgColor='#FEECFF'; this.contactEmail='info@digitalleague.ru';
+      this.contactSite='www.digitalleague.ru'; this.contactPhone='+7 495 790 90 73';
+      this.showSkills=true; this.showEducation=true; this.showContactEmail=true;
+      this.showContactSite=true; this.showContactPhone=true; this.showContactsBlock=true;
+      this.showPhoto=true; this.showLogo=true; this.showLogoBottom=true;
+      this.photoSrc=null; this.logoSrc=null; this.logoBottomSrc=null;
+      this.languages=[]; this.projects=[{company:'',organization:'',periodStart:'',periodEnd:'',isCurrent:false,role:'',description:''}];
+    },
     saveDraft() {
       const keys = ['fullName','jobTitle','skills','education','bgColor','contactEmail','contactSite','contactPhone','showSkills','showEducation','showContactEmail','showContactSite','showContactPhone','showContactsBlock','showPhoto','showLogo','showLogoBottom','languages','projects'];
       const data = {};
