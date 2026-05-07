@@ -87,6 +87,34 @@ function resumeData() {
       window.removeEventListener('resize', window._scalerUpdate)
       window.addEventListener('resize', window._scalerUpdate)
     },
+    saveDraft() {
+      const keys = ['fullName','jobTitle','skills','education','bgColor','contactEmail','contactSite','contactPhone','showSkills','showEducation','showContactEmail','showContactSite','showContactPhone','showContactsBlock','showPhoto','showLogo','showLogoBottom','languages','projects'];
+      const data = {};
+      keys.forEach(k => data[k] = this[k]);
+      const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'resume-draft.json';
+      a.click();
+    },
+    loadDraft() {
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.accept = '.json';
+      input.onchange = (e) => {
+        const file = e.target.files[0];
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          try {
+            const d = JSON.parse(ev.target.result);
+            const keys = ['fullName','jobTitle','skills','education','bgColor','contactEmail','contactSite','contactPhone','showSkills','showEducation','showContactEmail','showContactSite','showContactPhone','showContactsBlock','showPhoto','showLogo','showLogoBottom','languages','projects'];
+            keys.forEach(k => { if(d[k] !== undefined) this[k] = d[k]; });
+          } catch(e) { alert('Ошибка загрузки файла'); }
+        };
+        reader.readAsText(file);
+      };
+      input.click();
+    },
     async exportPDF() {
       const { jsPDF } = window.jspdf
       const element = document.querySelector('.page')

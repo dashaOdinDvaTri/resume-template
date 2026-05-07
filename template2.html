@@ -127,7 +127,11 @@
       </div>
       <div class="form-header">
         <h2>Заполните резюме</h2>
+        <div style="display:flex;gap:8px;align-items:center;">
+        <button @click="loadDraft()" style="padding:10px 16px;border:1px solid #d0d5e0;border-radius:100px;background:#fff;font-family:'Museo Sans Cyrl',sans-serif;font-size:14px;color:#334969;cursor:pointer;">📂 Загрузить</button>
+        <button @click="saveDraft()" style="padding:10px 16px;border:1px solid #008af5;border-radius:100px;background:#fff;font-family:'Museo Sans Cyrl',sans-serif;font-size:14px;color:#008af5;cursor:pointer;">💾 Сохранить</button>
         <button class="export-btn" @click="exportPDF()">Скачать PDF</button>
+      </div>
       </div>
 
       <!-- Основное -->
@@ -408,6 +412,27 @@ function t2Data(){
       window.addEventListener('resize',update);
     },
 
+    saveDraft(){
+      const keys=['fullName','jobTitle','skills','education','bgColor','contactEmail','contactSite','contactPhone','showSkills','showEducation','showContactEmail','showContactSite','showContactPhone','showContactsBlock','showPhoto','showLogo','showLogoBottom','languages','projects'];
+      const data={};keys.forEach(k=>data[k]=this[k]);
+      const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+      const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='resume-draft-t2.json';a.click();
+    },
+    loadDraft(){
+      const input=document.createElement('input');input.type='file';input.accept='.json';
+      input.onchange=(e)=>{
+        const reader=new FileReader();
+        reader.onload=(ev)=>{
+          try{
+            const d=JSON.parse(ev.target.result);
+            const keys=['fullName','jobTitle','skills','education','bgColor','contactEmail','contactSite','contactPhone','showSkills','showEducation','showContactEmail','showContactSite','showContactPhone','showContactsBlock','showPhoto','showLogo','showLogoBottom','languages','projects'];
+            keys.forEach(k=>{if(d[k]!==undefined)this[k]=d[k];});
+          }catch(e){alert('Ошибка загрузки файла');}
+        };
+        reader.readAsText(e.target.files[0]);
+      };
+      input.click();
+    },
     async exportPDF(){
       const{jsPDF}=window.jspdf;
       const element=this.$refs.resumePage;

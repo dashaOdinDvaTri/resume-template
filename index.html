@@ -129,7 +129,11 @@
 
       <div class="form-header">
         <h2>Заполните резюме</h2>
-        <button class="export-btn" @click="exportPDF()" style="width:auto; padding: 12px 32px; margin:0;">Скачать PDF</button>
+        <div style="display:flex;gap:8px;align-items:center;">
+        <button @click="loadDraft()" style="padding:10px 16px;border:1px solid #d0d5e0;border-radius:100px;background:#fff;font-family:'Museo Sans Cyrl',sans-serif;font-size:14px;color:#334969;cursor:pointer;">📂 Загрузить</button>
+        <button @click="saveDraft()" style="padding:10px 16px;border:1px solid #008af5;border-radius:100px;background:#fff;font-family:'Museo Sans Cyrl',sans-serif;font-size:14px;color:#008af5;cursor:pointer;">💾 Сохранить</button>
+        <button class="export-btn" @click="exportPDF()" style="width:auto;padding:12px 32px;margin:0;">Скачать PDF</button>
+      </div>
       </div>
 
       <div class="form-section">
