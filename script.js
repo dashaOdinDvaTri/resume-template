@@ -35,7 +35,7 @@ function resumeData() {
     showLogoBottom: true,
     photoError: '',
     projects: [
-      { company: '', periodStart: '', periodEnd: '', isCurrent: false, role: '', description: '' }
+      { company: '', organization: '', periodStart: '', periodEnd: '', isCurrent: false, role: '', description: '' }
     ],
 
     resetContacts() {
@@ -44,7 +44,7 @@ function resumeData() {
       this.contactPhone = '+7 495 790 90 73'
     },
     addProject() {
-      this.projects.push({ company: '', periodStart: '', periodEnd: '', isCurrent: false, role: '', description: '' })
+      this.projects.push({ company: '', organization: '', periodStart: '', periodEnd: '', isCurrent: false, role: '', description: '' })
     },
     removeProject(i) {
       this.projects.splice(i, 1)

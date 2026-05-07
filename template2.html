@@ -269,10 +269,9 @@
                 <span class="project-form-title" x-text="'Проект '+(i+1)"></span>
                 <button @click="projects.splice(i,1)" class="project-delete-btn"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#959dac" stroke-width="1.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg></button>
               </div>
-              <div class="form-row">
-                <div class="input-wrap" style="flex:1;min-width:0;"><span class="input-label">Название проекта</span><input type="text" x-model="project.company" placeholder="Введи текст"><button class="clear-btn" @click="project.company=''" x-show="project.company">✕</button></div>
-                <div class="input-wrap" style="flex:1;min-width:0;"><span class="input-label">Должность</span><input type="text" x-model="project.role" placeholder="Введи текст"><button class="clear-btn" @click="project.role=''" x-show="project.role">✕</button></div>
-              </div>
+              <div class="input-wrap"><span class="input-label">Организация</span><input type="text" x-model="project.organization" placeholder="Введи текст"><button class="clear-btn" @click="project.organization=''" x-show="project.organization">✕</button></div>
+              <div class="input-wrap"><span class="input-label">Название проекта</span><input type="text" x-model="project.company" placeholder="Введи текст"><button class="clear-btn" @click="project.company=''" x-show="project.company">✕</button></div>
+              <div class="input-wrap"><span class="input-label">Должность</span><input type="text" x-model="project.role" placeholder="Введи текст"><button class="clear-btn" @click="project.role=''" x-show="project.role">✕</button></div>
               <div class="form-row">
                 <div class="input-wrap" style="flex:1;min-width:0;"><span class="input-label">Начало</span><div class="date-input-wrap"><input type="text" x-model="project.periodStart" placeholder="ММ.ГГГГ" x-init="flatpickr($el,{locale:'ru',plugins:[new monthSelectPlugin({shorthand:true,dateFormat:'m.Y',altFormat:'m.Y'})],onChange:(d,s)=>{project.periodStart=s}})"><svg class="calendar-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#959dac" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div></div>
                 <div class="input-wrap" style="flex:1;min-width:0;"><span class="input-label">Окончание</span><div class="date-input-wrap"><input type="text" x-model="project.periodEnd" :disabled="project.isCurrent" :placeholder="project.isCurrent?'По настоящее время':'ММ.ГГГГ'" x-init="flatpickr($el,{locale:'ru',plugins:[new monthSelectPlugin({shorthand:true,dateFormat:'m.Y',altFormat:'m.Y'})],onChange:(d,s)=>{project.periodEnd=s}})"><svg class="calendar-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#959dac" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div></div>
@@ -284,7 +283,7 @@
               <div class="input-wrap"><span class="input-label">Обязанности</span><textarea x-model="project.description" placeholder="Введи текст" @input="$event.target.style.height='96px';$event.target.style.height=$event.target.scrollHeight+'px'"></textarea><button class="clear-btn" @click="project.description=''" x-show="project.description">✕</button></div>
             </div>
           </template>
-          <button @click="projects.push({company:'',periodStart:'',periodEnd:'',isCurrent:false,role:'',description:''})" class="add-btn">+ Добавить проект</button>
+          <button @click="projects.push({company:'',organization:'',periodStart:'',periodEnd:'',isCurrent:false,role:'',description:''})" class="add-btn">+ Добавить проект</button>
         </div>
       </div>
     </div>
@@ -344,7 +343,7 @@
                   <div class="t2-project-period" x-text="project.isCurrent?(project.periodStart?project.periodStart+' — По наст. время':'месяц.год — По наст. время'):(project.periodStart||project.periodEnd?project.periodStart+' — '+project.periodEnd:'месяц.год — месяц.год')"></div>
                 </div>
                 <div class="t2-project-content">
-                  <div class="t2-project-role" x-text="project.role||'Должность на проекте'"></div>
+                  <div class="t2-project-role" style="font-weight:700" x-text="project.organization||'Организация'"></div><div class="t2-project-role" style="font-weight:400" x-text="project.role||'Должность на проекте'"></div>
                   <div class="t2-project-desc" x-text="project.description||'Текст описания'"></div>
                 </div>
               </div>
@@ -372,7 +371,7 @@ function t2Data(){
     photoSrc:null,showPhoto:true,logoSrc:null,logoBottomSrc:null,showLogo:true,showLogoBottom:true,
     languages:[],
     languageLevels:['Новичок','Средний','Хороший','Очень хороший','Свободно владею','A1','A2','B1','B2','C1','C2'],
-    projects:[{company:'',periodStart:'',periodEnd:'',isCurrent:false,role:'',description:''}],
+    projects:[{company:'',organization:'',periodStart:'',periodEnd:'',isCurrent:false,role:'',description:''}],
 
     init(){
       // Загружаем сохранённые данные

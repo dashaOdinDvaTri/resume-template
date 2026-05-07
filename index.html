@@ -424,17 +424,20 @@
                 </svg>
               </button>
             </div>
-            <div class="form-row" style="gap:12px;">
-              <div class="input-wrap" style="flex:1; min-width:0;">
-                <span class="input-label">Название проекта</span>
-                <input type="text" x-model="project.company" placeholder="Введи текст">
-                <button class="clear-btn" @click="project.company = ''" x-show="project.company">✕</button>
-              </div>
-              <div class="input-wrap" style="flex:1; min-width:0;">
-                <span class="input-label">Должность</span>
-                <input type="text" x-model="project.role" placeholder="Введи текст">
-                <button class="clear-btn" @click="project.role = ''" x-show="project.role">✕</button>
-              </div>
+            <div class="input-wrap">
+              <span class="input-label">Организация</span>
+              <input type="text" x-model="project.organization" placeholder="Введи текст">
+              <button class="clear-btn" @click="project.organization = ''" x-show="project.organization">✕</button>
+            </div>
+            <div class="input-wrap">
+              <span class="input-label">Название проекта</span>
+              <input type="text" x-model="project.company" placeholder="Введи текст">
+              <button class="clear-btn" @click="project.company = ''" x-show="project.company">✕</button>
+            </div>
+            <div class="input-wrap">
+              <span class="input-label">Должность</span>
+              <input type="text" x-model="project.role" placeholder="Введи текст">
+              <button class="clear-btn" @click="project.role = ''" x-show="project.role">✕</button>
             </div>
             <div style="display:flex; flex-direction:column; gap:0; align-items:stretch;">
               <div class="form-row" style="gap:12px; width:100%;">
@@ -561,7 +564,7 @@
                   <div class="project-period" x-text="project.isCurrent ? (project.periodStart ? formatDate(project.periodStart) + ' — По настоящее время' : 'месяц.год — По настоящее время') : (project.periodStart || project.periodEnd ? formatDate(project.periodStart) + ' — ' + formatDate(project.periodEnd) : 'месяц.год — месяц.год')"></div>
                 </div>
                 <div class="project-content">
-                  <div class="project-role" x-text="project.role || 'Должность на проекте'"></div>
+                  <div class="project-role" style="font-weight:700" x-text="project.organization || 'Организация'"></div><div class="project-role" style="font-weight:400" x-text="project.role || 'Должность на проекте'"></div>
                   <div class="project-field" x-text="project.description || 'Текст описания'"></div>
                 </div>
               </div>
