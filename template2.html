@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Резюме — Шаблон 2</title>
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.cdnfonts.com/css/museo-sans-cyrl" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ru.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/index.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{background:#e0e0e0;font-family:'Museo Sans Cyrl',sans-serif;height:100vh;overflow:hidden}
+    .builder-layout{display:flex;width:100%;height:100vh;overflow:hidden}
+
+    /* ФОРМА */
+    .form-panel{width:40%;min-width:360px;max-width:640px;background:#fff;border-right:1px solid #e0e0e0;padding:32px;overflow-y:auto;height:100vh;display:flex;flex-direction:column}
+    .form-panel-inner{flex:1}
+    .form-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:32px}
+    .form-header h2{font-weight:700;font-size:32px;color:#000}
+    .breadcrumb{display:flex;align-items:center;gap:8px;margin-bottom:20px;font-size:13px}
+    .breadcrumb a{color:#008af5;text-decoration:none;cursor:pointer}
+    .breadcrumb span{color:#959dac}
+    .form-section{display:flex;flex-direction:column;gap:12px;margin-bottom:24px}
+    .section-toggle{display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;margin-bottom:8px}
+    .section-toggle-title{font-weight:700;font-size:20px;color:#000}
+    .section-arrow{width:24px;height:24px;background:#f2f2f2;border-radius:40px;display:flex;align-items:center;justify-content:center;transition:transform .25s}
+    .section-arrow.open{transform:rotate(180deg)}
+    .input-wrap{position:relative;margin-bottom:12px}
+    .input-label{position:absolute;top:0;left:10px;background:#fff;padding:0 2px;font-size:12px;font-weight:500;color:#959dac;line-height:16px;pointer-events:none;z-index:1}
+    .input-wrap input,.input-wrap textarea{width:100%;border:1px solid #d0d5e0;border-radius:8px;padding:20px 36px 6px 12px;font-family:'Museo Sans Cyrl',sans-serif;font-size:14px;color:#1a2336;outline:none;background:#fff}
+    .input-wrap input{height:48px}
+    .input-wrap textarea{min-height:96px;resize:none;overflow:hidden;padding-top:20px}
+    .input-wrap input:focus,.input-wrap textarea:focus{border-color:#334969}
+    .input-wrap input::placeholder,.input-wrap textarea::placeholder{color:#959dac}
+    .clear-btn{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#959dac;font-size:16px;padding:0;z-index:2}
+    .input-wrap:has(textarea) .clear-btn{top:12px;transform:none}
+    .form-row{display:flex;gap:12px;align-items:flex-start}
+    .form-col{display:flex;flex-direction:column;gap:12px;flex:1;min-width:0}
+    .photo-block{position:relative;width:140px;flex-shrink:0}
+    .photo-upload{width:121px;height:121px;border-radius:50%;background:#e8eaed;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px;color:#959dac;text-align:center;padding:16px;border:none}
+    .photo-uploaded{position:relative;width:121px;height:121px}
+    .photo-preview-round{width:121px;height:121px;border-radius:50%;object-fit:cover;display:block}
+    .photo-actions{position:absolute;bottom:0;left:0;right:0;display:flex;justify-content:space-between;padding:0 13px}
+    .photo-action-btn{width:32px;height:32px;border-radius:50%;background:white;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,.15)}
+    .switch-wrap{width:36px;height:20px;background:#e8eaf0;border-radius:999px;position:relative;cursor:pointer;transition:background .2s;flex-shrink:0}
+    .switch-wrap.on{background:#008af5}
+    .switch-thumb{width:16px;height:16px;background:white;border-radius:50%;position:absolute;top:2px;left:2px;transition:left .18s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+    .switch-wrap.on .switch-thumb{left:18px}
+    .toggle-btn{background:none;border:none;cursor:pointer;color:#959dac;display:flex;align-items:center;justify-content:center;width:24px;height:24px;padding:0}
+    .project-form-block{border:1px solid #e0e0e0;border-radius:8px;padding:16px;margin-bottom:12px;display:flex;flex-direction:column;gap:8px}
+    .project-form-header{display:flex;justify-content:space-between;align-items:center}
+    .project-form-title{font-weight:700;font-size:18px;color:#000}
+    .project-delete-btn{background:none;border:none;cursor:pointer;padding:0;display:flex}
+    .add-btn{width:100%;padding:12px 32px;border:2px solid #008af5;border-radius:24px;background:none;cursor:pointer;font-size:14px;color:#008af5;font-family:'Museo Sans Cyrl',sans-serif}
+    .export-btn{padding:12px 32px;background:#1a6eff;color:#fff;border:none;border-radius:100px;font-family:'Museo Sans Cyrl',sans-serif;font-size:16px;font-weight:600;cursor:pointer}
+    .export-btn:hover{background:#0f5ae0}
+    .lang-select{width:100%;height:48px;border:1px solid #d0d5e0;border-radius:8px;padding:0 12px;font-family:'Museo Sans Cyrl',sans-serif;font-size:14px;color:#1a2336;background:#fff;outline:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23959dac' stroke-width='2' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;cursor:pointer}
+    .language-edit{border:1px solid #d0d5e0;border-radius:8px;padding:16px;display:flex;flex-direction:column;gap:12px;margin-bottom:8px}
+    .language-edit-row{display:flex;gap:12px}
+    .language-edit-actions{display:flex;justify-content:flex-end;gap:8px}
+    .lang-delete-btn{background:none;border:1px solid #d0d5e0;border-radius:8px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+    .lang-confirm-btn{height:40px;padding:0 20px;background:#008af5;color:#fff;border:none;border-radius:8px;font-family:'Museo Sans Cyrl',sans-serif;font-size:14px;font-weight:600;cursor:pointer}
+    .language-tag{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border:1px solid #d0d5e0;border-radius:8px;font-size:14px;color:#334969;cursor:pointer;margin-bottom:8px}
+    .lang-tag-delete{background:none;border:none;cursor:pointer;color:#959dac;font-size:14px;padding:0}
+    .date-input-wrap{position:relative}
+    .calendar-icon{position:absolute;right:11px;top:50%;transform:translateY(-50%);pointer-events:none}
+    .form-footer{background:#f4f4f4;padding:10px;text-align:center;font-size:12px;font-weight:500;color:#000;margin-top:32px}
+
+    /* ПРЕВЬЮ */
+    .preview-panel{flex:1;background:#e0e0e0;padding:32px;overflow-y:auto;overflow-x:hidden;display:flex;flex-direction:column;align-items:center}
+    .preview-scaler{transform-origin:top center;width:912px;flex-shrink:0}
+
+    /* СТРАНИЦА */
+    .page-t2{width:912px;min-height:1215px;background:#fff;display:flex;align-items:stretch;box-shadow:0 4px 24px rgba(0,0,0,.18);font-family:'Raleway',sans-serif;position:relative}
+    .t2-left{width:259px;min-width:259px;display:flex;flex-direction:column;padding-top:300px;padding-bottom:32px;gap:16px;position:relative;flex-shrink:0}
+    .t2-logo{position:absolute;top:27px;left:22px;z-index:2}
+    .t2-logo img{height:29px;width:auto}
+    .t2-photo{position:absolute;top:112px;left:50%;transform:translateX(-50%);z-index:2;width:160px}
+    .t2-photo-placeholder{width:160px;height:160px;border-radius:50%;overflow:hidden}
+    .t2-photo-placeholder img{width:100%;height:100%;object-fit:cover}
+    .t2-sidebar-card{margin:0 22px;background:#fff;border-radius:24px;box-shadow:0 4px 10px rgba(42,43,56,.08);overflow:hidden}
+    .t2-card-section{padding:20px 20px 0}
+    .t2-card-section:last-child{padding-bottom:20px}
+    .t2-card-title{font-weight:800;font-size:20px;color:#008af5;letter-spacing:.4px;margin-bottom:16px;line-height:1.2}
+    .t2-card-content{font-weight:500;font-size:14px;color:#334969;line-height:1.3;word-break:break-word;padding-bottom:12px;white-space:pre-line}
+    .t2-contacts-card{margin:0 22px;background:#fff;border-radius:24px;padding:20px;box-shadow:0 4px 10px rgba(42,43,56,.08);margin-top:auto}
+    .t2-contacts-title{font-weight:800;font-size:20px;color:#008af5;letter-spacing:.4px;margin-bottom:16px}
+    .t2-contact-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;font-size:14px;color:#334969;font-family:'Raleway',sans-serif}
+    .t2-contact-row:last-child{margin-bottom:0}
+    .t2-right{width:621px;flex-shrink:0;padding:32px 32px 32px 16px;display:flex;flex-direction:column;gap:24px;overflow:hidden}
+    .t2-name-card{background:linear-gradient(79deg,#008af5 26%,rgba(0,138,245,0) 106%);background-color:#3287f8;border-radius:24px;height:223px;padding:32px 24px;display:flex;align-items:flex-end;position:relative;overflow:hidden}
+    .t2-job-title{font-weight:800;font-size:32px;color:#fff;letter-spacing:.64px;line-height:1.2;margin-bottom:12px}
+    .t2-full-name{font-weight:600;font-size:20px;color:#fff;letter-spacing:.4px}
+    .t2-projects-card{background:#fff;border-radius:24px;padding:24px 12px;box-shadow:0 4px 10px rgba(42,43,56,.08);display:flex;flex-direction:column;gap:12px;margin-bottom:56px}
+    .t2-projects-title{font-weight:800;font-size:24px;color:#008af5;letter-spacing:.48px;padding:0 12px}
+    .t2-project-row{background:#f3f6f8;border-radius:12px;padding:12px 24px;display:flex;gap:22px;align-items:flex-start;width:100%;box-sizing:border-box}
+    .t2-project-meta{width:152px;flex-shrink:0;display:flex;flex-direction:column;gap:5px}
+    .t2-project-name{font-weight:700;font-size:14px;color:#172a46;line-height:1.3}
+    .t2-project-period{font-weight:500;font-size:12px;color:#172a46;line-height:1.3}
+    .t2-project-content{flex:1;display:flex;flex-direction:column;gap:12px;min-width:0;overflow:hidden;word-break:break-word}
+    .t2-project-role{font-weight:700;font-size:14px;color:#172a46;line-height:1.3}
+    .t2-project-desc{font-weight:500;font-size:14px;color:#172a46;line-height:1.5;white-space:pre-line;word-break:break-word}
+    .t2-slogan{position:absolute;bottom:32px;left:275px;right:32px;font-family:'Museo Sans Cyrl',sans-serif;font-weight:700;font-size:24px;color:#334969;text-transform:uppercase;letter-spacing:1px;text-align:right}
+    .t2-logo-bottom{position:absolute;bottom:24px;right:32px;height:48px;width:auto;z-index:2}
+    .flatpickr-monthSelect-month.selected,.flatpickr-monthSelect-month.selected:hover{background:#008af5 !important;border-color:#008af5 !important}
+  </style>
+</head>
+<body x-data="t2Data()">
+<div class="builder-layout">
+
+  <!-- ФОРМА -->
+  <div class="form-panel">
+    <div class="form-panel-inner">
+      <div class="breadcrumb">
+        <a href="index.html">Выбор шаблона</a>
+        <span>→</span>
+        <span>Шаблон 2</span>
+      </div>
+      <div class="form-header">
+        <h2>Заполните резюме</h2>
+        <button class="export-btn" @click="exportPDF()">Скачать PDF</button>
+      </div>
+
+      <!-- Основное -->
+      <div class="form-section">
+        <div class="section-toggle" @click="showMain=!showMain">
+          <div class="section-toggle-title">Основное</div>
+          <div class="section-arrow" :class="showMain?'open':''"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#334969" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+        </div>
+        <div x-show="showMain" x-collapse>
+          <div class="form-row">
+            <div class="photo-block">
+              <div class="photo-upload" x-show="!photoSrc" @click="$refs.photoInput.click()"><span>+ загрузить фото</span></div>
+              <div class="photo-uploaded" x-show="photoSrc">
+                <img :src="photoSrc" class="photo-preview-round">
+                <div class="photo-actions">
+                  <button class="photo-action-btn" @click="$refs.photoInput.click()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#334969" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+                  <button class="photo-action-btn" @click="photoSrc=null;$refs.photoInput.value=''"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#e53935" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg></button>
+                </div>
+              </div>
+              <input type="file" x-ref="photoInput" accept="image/*" style="display:none" @change="const f=$event.target.files[0];if(f){const r=new FileReader();r.onload=e=>photoSrc=e.target.result;r.readAsDataURL(f)}">
+              <div style="display:flex;align-items:center;justify-content:center;gap:6px;margin-top:8px;">
+                <span style="font-size:11px;font-weight:500;color:#959dac;white-space:nowrap;">Показать фото</span>
+                <div class="switch-wrap" :class="showPhoto?'on':''" @click="showPhoto=!showPhoto"><div class="switch-thumb"></div></div>
+              </div>
+            </div>
+            <div class="form-col">
+              <div class="input-wrap"><span class="input-label">Должность</span><input type="text" x-model="jobTitle" placeholder="Введи текст"><button class="clear-btn" @click="jobTitle=''" x-show="jobTitle">✕</button></div>
+              <div class="input-wrap"><span class="input-label">Имя Фамилия</span><input type="text" x-model="fullName" placeholder="Введи текст"><button class="clear-btn" @click="fullName=''" x-show="fullName">✕</button></div>
+            <div>
+              <div class="color-label">Цвет боковой панели</div>
+              <div class="color-picker">
+                <div class="color-swatch" style="background:#E9EFF5" :class="{active:bgColor==='#E9EFF5'}" @click="bgColor='#E9EFF5'"></div>
+                <div class="color-swatch" style="background:#F3EAEF" :class="{active:bgColor==='#F3EAEF'}" @click="bgColor='#F3EAEF'"></div>
+                <div class="color-swatch" style="background:#EAF3F1" :class="{active:bgColor==='#EAF3F1'}" @click="bgColor='#EAF3F1'"></div>
+                <div class="color-swatch" style="background:#ECF5FB" :class="{active:bgColor==='#ECF5FB'}" @click="bgColor='#ECF5FB'"></div>
+              </div>
+            </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Логотип -->
+      <div class="form-section">
+        <div class="section-toggle" @click="showLogoSection=!showLogoSection">
+          <div class="section-toggle-title">Логотип</div>
+          <div class="section-arrow" :class="showLogoSection?'open':''"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#334969" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+        </div>
+        <div x-show="showLogoSection" x-collapse>
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;"><span style="font-size:14px;color:#334969;">Верхний логотип</span><div style="display:flex;gap:8px;align-items:center;"><button class="photo-action-btn" @click="$refs.logoInput.click()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#334969" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button><div class="switch-wrap" :class="showLogo?'on':''" @click="showLogo=!showLogo"><div class="switch-thumb"></div></div></div></div>
+            
+          </div>
+          <input type="file" x-ref="logoInput" accept="image/*" style="display:none" @change="const f=$event.target.files[0];if(f){const r=new FileReader();r.onload=e=>logoSrc=e.target.result;r.readAsDataURL(f)}">
+          
+        </div>
+      </div>
+
+      <!-- Навыки -->
+      <div class="form-section">
+        <div class="section-toggle" @click="showSkillsEdu=!showSkillsEdu">
+          <div class="section-toggle-title">Навыки и образование</div>
+          <div class="section-arrow" :class="showSkillsEdu?'open':''"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#334969" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+        </div>
+        <div x-show="showSkillsEdu" x-collapse>
+          <div style="display:flex;flex-direction:column;gap:16px;">
+            <div style="display:flex;gap:10px;align-items:flex-start;">
+              <div class="input-wrap" style="flex:1;min-width:0;"><span class="input-label">Навыки и технологии</span><textarea x-show="showSkills" x-model="skills" placeholder="Введи текст" @input="$event.target.style.height='96px';$event.target.style.height=$event.target.scrollHeight+'px'"></textarea><button class="clear-btn" @click="skills=''" x-show="skills">✕</button></div>
+              <div style="display:flex;height:54px;align-items:center;"><button @click="showSkills=!showSkills" class="toggle-btn"><svg x-show="showSkills" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" fill="#959dac"/></svg><svg x-show="!showSkills" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 6.5c2.76 0 5 2.24 5 5 0 .51-.1 1-.24 1.46l2.92 2.92c1.51-1.26 2.7-2.89 3.43-4.77-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-3.98.7l2.16 2.16c.46-.14.95-.24 1.46-.24zM2.71 3.16a1 1 0 0 0 0 1.41l1.97 1.97A11.892 11.892 0 0 0 1 11.5c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l2.62 2.62a1 1 0 1 0 1.41-1.41L4.13 3.16a1 1 0 0 0-1.42 0zM12 16.5c-2.76 0-5-2.24-5-5 0-.77.18-1.5.49-2.14l1.57 1.57c-.03.18-.06.37-.06.57 0 1.66 1.34 3 3 3 .2 0 .38-.03.57-.07l1.57 1.57c-.64.32-1.37.5-2.14.5zm2.97-5.33a2.97 2.97 0 0 0-2.64-2.64l2.64 2.64z" fill="#959dac"/></svg></button></div>
+            </div>
+            <div style="display:flex;gap:10px;align-items:flex-start;">
+              <div class="input-wrap" style="flex:1;min-width:0;"><span class="input-label">Образование</span><textarea x-show="showEducation" x-model="education" placeholder="Введи текст" @input="$event.target.style.height='96px';$event.target.style.height=$event.target.scrollHeight+'px'"></textarea><button class="clear-btn" @click="education=''" x-show="education">✕</button></div>
+              <div style="display:flex;height:54px;align-items:center;"><button @click="showEducation=!showEducation" class="toggle-btn"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" fill="#959dac"/></svg></button></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Языки -->
+      <div class="form-section">
+        <div class="section-toggle" @click="showLanguages=!showLanguages">
+          <div class="section-toggle-title">Языки</div>
+          <div class="section-arrow" :class="showLanguages?'open':''"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#334969" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+        </div>
+        <div x-show="showLanguages" x-collapse>
+          <template x-for="(lang,i) in languages" :key="i">
+            <div>
+              <template x-if="lang.editing">
+                <div class="language-edit">
+                  <div class="language-edit-row">
+                    <div class="input-wrap" style="flex:1"><span class="input-label">Язык</span><input type="text" x-model="lang.name" placeholder="Введи текст"></div>
+                    <div class="input-wrap" style="flex:1"><span class="input-label">Уровень</span><select x-model="lang.level" class="lang-select"><option value="" disabled selected>Выбрать</option><template x-for="lvl in languageLevels" :key="lvl"><option :value="lvl" x-text="lvl"></option></template></select></div>
+                  </div>
+                  <div class="language-edit-actions">
+                    <button class="lang-delete-btn" @click="languages.splice(i,1)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#959dac" stroke-width="1.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg></button>
+                    <button class="lang-confirm-btn" @click="lang.editing=false">Готово</button>
+                  </div>
+                </div>
+              </template>
+              <template x-if="!lang.editing">
+                <div class="language-tag" @click="lang.editing=true"><span x-text="lang.name+(lang.level?' — '+lang.level:'')"></span><button @click.stop="languages.splice(i,1)" class="lang-tag-delete">✕</button></div>
+              </template>
+            </div>
+          </template>
+          <button @click="languages.push({name:'',level:'',editing:true})" class="add-btn" style="margin-top:8px">+ Добавить язык</button>
+        </div>
+      </div>
+
+      <!-- Контакты -->
+      <div class="form-section">
+        <div class="section-toggle" @click="showContactsSection=!showContactsSection">
+          <div class="section-toggle-title">Контакты</div>
+          <div style="display:flex;align-items:center;gap:8px;" @click.stop>
+            <span style="font-size:12px;font-weight:500;color:#959dac;">Показать</span>
+            <div class="switch-wrap" :class="showContactsBlock?'on':''" @click="showContactsBlock=!showContactsBlock"><div class="switch-thumb"></div></div>
+            <div class="section-arrow" :class="showContactsSection?'open':''" @click="showContactsSection=!showContactsSection"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#334969" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+          </div>
+        </div>
+        <div x-show="showContactsSection" x-collapse>
+          <div style="display:flex;flex-direction:column;gap:16px;">
+            <div style="display:flex;gap:12px;align-items:flex-start;"><div style="display:flex;height:54px;align-items:center;flex-shrink:0;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#334969" stroke-width="1.5"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg></div><div class="input-wrap" style="flex:1;min-width:0;"><span class="input-label">Email</span><input type="text" x-model="contactEmail" placeholder="Введи текст"><button class="clear-btn" @click="contactEmail=''" x-show="contactEmail">✕</button></div><div style="display:flex;height:54px;align-items:center;"><button @click="showContactEmail=!showContactEmail" class="toggle-btn"><svg x-show="showContactEmail" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" fill="#959dac"/></svg><svg x-show="!showContactEmail" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 6.5c2.76 0 5 2.24 5 5 0 .51-.1 1-.24 1.46l2.92 2.92c1.51-1.26 2.7-2.89 3.43-4.77-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-3.98.7l2.16 2.16c.46-.14.95-.24 1.46-.24zM2.71 3.16a1 1 0 0 0 0 1.41l1.97 1.97A11.892 11.892 0 0 0 1 11.5c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l2.62 2.62a1 1 0 1 0 1.41-1.41L4.13 3.16a1 1 0 0 0-1.42 0zM12 16.5c-2.76 0-5-2.24-5-5 0-.77.18-1.5.49-2.14l1.57 1.57c-.03.18-.06.37-.06.57 0 1.66 1.34 3 3 3 .2 0 .38-.03.57-.07l1.57 1.57c-.64.32-1.37.5-2.14.5zm2.97-5.33a2.97 2.97 0 0 0-2.64-2.64l2.64 2.64z" fill="#959dac"/></svg></button></div></div>
+            <div style="display:flex;gap:12px;align-items:flex-start;"><div style="display:flex;height:54px;align-items:center;flex-shrink:0;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#334969" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div><div class="input-wrap" style="flex:1;min-width:0;"><span class="input-label">Сайт</span><input type="text" x-model="contactSite" placeholder="Введи текст"><button class="clear-btn" @click="contactSite=''" x-show="contactSite">✕</button></div><div style="display:flex;height:54px;align-items:center;"><button @click="showContactSite=!showContactSite" class="toggle-btn"><svg x-show="showContactSite" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" fill="#959dac"/></svg><svg x-show="!showContactSite" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 6.5c2.76 0 5 2.24 5 5 0 .51-.1 1-.24 1.46l2.92 2.92c1.51-1.26 2.7-2.89 3.43-4.77-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-3.98.7l2.16 2.16c.46-.14.95-.24 1.46-.24zM2.71 3.16a1 1 0 0 0 0 1.41l1.97 1.97A11.892 11.892 0 0 0 1 11.5c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l2.62 2.62a1 1 0 1 0 1.41-1.41L4.13 3.16a1 1 0 0 0-1.42 0zM12 16.5c-2.76 0-5-2.24-5-5 0-.77.18-1.5.49-2.14l1.57 1.57c-.03.18-.06.37-.06.57 0 1.66 1.34 3 3 3 .2 0 .38-.03.57-.07l1.57 1.57c-.64.32-1.37.5-2.14.5zm2.97-5.33a2.97 2.97 0 0 0-2.64-2.64l2.64 2.64z" fill="#959dac"/></svg></button></div></div>
+            <div style="display:flex;gap:12px;align-items:flex-start;"><div style="display:flex;height:54px;align-items:center;flex-shrink:0;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#334969" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.78a16 16 0 0 0 6.29 6.29l1.62-1.62a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div><div class="input-wrap" style="flex:1;min-width:0;"><span class="input-label">Телефон</span><input type="text" x-model="contactPhone" placeholder="Введи текст"><button class="clear-btn" @click="contactPhone=''" x-show="contactPhone">✕</button></div><div style="display:flex;height:54px;align-items:center;"><button @click="showContactPhone=!showContactPhone" class="toggle-btn"><svg x-show="showContactPhone" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" fill="#959dac"/></svg><svg x-show="!showContactPhone" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 6.5c2.76 0 5 2.24 5 5 0 .51-.1 1-.24 1.46l2.92 2.92c1.51-1.26 2.7-2.89 3.43-4.77-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-3.98.7l2.16 2.16c.46-.14.95-.24 1.46-.24zM2.71 3.16a1 1 0 0 0 0 1.41l1.97 1.97A11.892 11.892 0 0 0 1 11.5c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l2.62 2.62a1 1 0 1 0 1.41-1.41L4.13 3.16a1 1 0 0 0-1.42 0zM12 16.5c-2.76 0-5-2.24-5-5 0-.77.18-1.5.49-2.14l1.57 1.57c-.03.18-.06.37-.06.57 0 1.66 1.34 3 3 3 .2 0 .38-.03.57-.07l1.57 1.57c-.64.32-1.37.5-2.14.5zm2.97-5.33a2.97 2.97 0 0 0-2.64-2.64l2.64 2.64z" fill="#959dac"/></svg></button></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Проекты -->
+      <div class="form-section">
+        <div class="section-toggle" @click="showProjects=!showProjects">
+          <div class="section-toggle-title">Проектный опыт</div>
+          <div class="section-arrow" :class="showProjects?'open':''"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#334969" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+        </div>
+        <div x-show="showProjects" x-collapse>
+          <template x-for="(project,i) in projects" :key="i">
+            <div class="project-form-block">
+              <div class="project-form-header">
+                <span class="project-form-title" x-text="'Проект '+(i+1)"></span>
+                <button @click="projects.splice(i,1)" class="project-delete-btn"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#959dac" stroke-width="1.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg></button>
+              </div>
+              <div class="form-row">
+                <div class="input-wrap" style="flex:1;min-width:0;"><span class="input-label">Название проекта</span><input type="text" x-model="project.company" placeholder="Введи текст"><button class="clear-btn" @click="project.company=''" x-show="project.company">✕</button></div>
+                <div class="input-wrap" style="flex:1;min-width:0;"><span class="input-label">Должность</span><input type="text" x-model="project.role" placeholder="Введи текст"><button class="clear-btn" @click="project.role=''" x-show="project.role">✕</button></div>
+              </div>
+              <div class="form-row">
+                <div class="input-wrap" style="flex:1;min-width:0;"><span class="input-label">Начало</span><div class="date-input-wrap"><input type="text" x-model="project.periodStart" placeholder="ММ.ГГГГ" x-init="flatpickr($el,{locale:'ru',plugins:[new monthSelectPlugin({shorthand:true,dateFormat:'m.Y',altFormat:'m.Y'})],onChange:(d,s)=>{project.periodStart=s}})"><svg class="calendar-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#959dac" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div></div>
+                <div class="input-wrap" style="flex:1;min-width:0;"><span class="input-label">Окончание</span><div class="date-input-wrap"><input type="text" x-model="project.periodEnd" :disabled="project.isCurrent" :placeholder="project.isCurrent?'По настоящее время':'ММ.ГГГГ'" x-init="flatpickr($el,{locale:'ru',plugins:[new monthSelectPlugin({shorthand:true,dateFormat:'m.Y',altFormat:'m.Y'})],onChange:(d,s)=>{project.periodEnd=s}})"><svg class="calendar-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#959dac" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div></div>
+              </div>
+              <div style="display:flex;gap:12px;align-items:center;justify-content:flex-end;margin-bottom:12px;">
+                <span style="font-size:12px;font-weight:500;color:#959dac;">По настоящее время</span>
+                <div class="switch-wrap" :class="project.isCurrent?'on':''" @click="project.isCurrent=!project.isCurrent;if(project.isCurrent)project.periodEnd=''"><div class="switch-thumb"></div></div>
+              </div>
+              <div class="input-wrap"><span class="input-label">Обязанности</span><textarea x-model="project.description" placeholder="Введи текст" @input="$event.target.style.height='96px';$event.target.style.height=$event.target.scrollHeight+'px'"></textarea><button class="clear-btn" @click="project.description=''" x-show="project.description">✕</button></div>
+            </div>
+          </template>
+          <button @click="projects.push({company:'',periodStart:'',periodEnd:'',isCurrent:false,role:'',description:''})" class="add-btn">+ Добавить проект</button>
+        </div>
+      </div>
+    </div>
+    <div class="form-footer"><span>Что-то сломалось или есть идеи, напиши в </span><a href="https://t.me/sabaisabay" target="_blank" style="color:#008af5;text-decoration:none;">Telegram</a></div>
+  </div>
+
+  <!-- ПРЕВЬЮ -->
+  <div class="preview-panel" x-ref="previewPanel">
+    <div class="preview-scaler" x-ref="scaler">
+      <div class="page-t2" x-ref="resumePage">
+
+        <div class="t2-left" :style="'background:' + bgColor">
+          <div class="t2-logo" x-show="showLogo"><img :src="logoSrc||'logo.png'" alt="Логотип"></div>
+          <div class="t2-photo" x-show="showPhoto">
+            <img x-show="photoSrc" :src="photoSrc" style="width:160px;height:160px;border-radius:50%;object-fit:cover;display:block;">
+            <div x-show="!photoSrc" class="t2-photo-placeholder"><img src="placeholder-person.png" alt="Фото"></div>
+          </div>
+          <div class="t2-sidebar-card">
+            <div class="t2-card-section" x-show="showSkills">
+              <div class="t2-card-title">Навыки, технологии</div>
+              <div class="t2-card-content" x-text="skills||'Текст навыков'"></div>
+            </div>
+            <div class="t2-card-section" x-show="showEducation">
+              <div class="t2-card-title">Образование</div>
+              <div class="t2-card-content" x-text="education||'Информация об учебном заведении'"></div>
+            </div>
+            <div class="t2-card-section" x-show="languages.filter(l=>!l.editing&&l.name).length>0">
+              <div class="t2-card-title" style="margin-bottom:0">Языки</div>
+              <div class="t2-card-content">
+                <template x-for="(lang,i) in languages.filter(l=>!l.editing&&l.name)" :key="i">
+                  <div x-text="lang.name+(lang.level?' — '+lang.level:'')"></div>
+                </template>
+              </div>
+            </div>
+          </div>
+          <div class="t2-contacts-card" x-show="showContactsBlock&&(showContactEmail||showContactSite||showContactPhone)">
+            <div class="t2-contacts-title">Контакты</div>
+            <div x-show="showContactEmail&&contactEmail" class="t2-contact-row"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#334969" stroke-width="1.5"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg><span x-text="contactEmail"></span></div>
+            <div x-show="showContactSite&&contactSite" class="t2-contact-row"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#334969" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg><span x-text="contactSite"></span></div>
+            <div x-show="showContactPhone&&contactPhone" class="t2-contact-row"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#334969" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.78a16 16 0 0 0 6.29 6.29l1.62-1.62a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg><span x-text="contactPhone"></span></div>
+          </div>
+        </div>
+
+        <div class="t2-right">
+          <div class="t2-name-card"><img src="image-name.png" style="position:absolute;top:0;right:0;height:100%;width:auto;object-fit:cover;pointer-events:none;z-index:0;">
+            <div style="position:relative;z-index:1;">
+              <div class="t2-job-title" x-text="jobTitle||'Должность'"></div>
+              <div class="t2-full-name" x-text="fullName||'Имя Фамилия'"></div>
+            </div>
+          </div>
+          <div class="t2-projects-card">
+            <div class="t2-projects-title">Проектный опыт</div>
+            <template x-for="(project,i) in projects" :key="i">
+              <div class="t2-project-row">
+                <div class="t2-project-meta">
+                  <div class="t2-project-name" x-text="project.company||'Название проекта'"></div>
+                  <div class="t2-project-period" x-text="project.isCurrent?(project.periodStart?project.periodStart+' — По наст. время':'месяц.год — По наст. время'):(project.periodStart||project.periodEnd?project.periodStart+' — '+project.periodEnd:'месяц.год — месяц.год')"></div>
+                </div>
+                <div class="t2-project-content">
+                  <div class="t2-project-role" x-text="project.role||'Должность на проекте'"></div>
+                  <div class="t2-project-desc" x-text="project.description||'Текст описания'"></div>
+                </div>
+              </div>
+            </template>
+          </div>
+        </div>
+
+        <div class="t2-slogan">ДОВЕРИЕ • ЭНЕРГИЯ • ЭКСПЕРТИЗА</div>
+        
+
+      </div>
+    </div>
+  </div>
+
+</div>
+<script>
+function t2Data(){
+  return{
+    fullName:'',jobTitle:'',skills:'',education:'',bgColor:'#E9EFF5',
+    showSkills:true,showEducation:true,
+    contactEmail:'info@digitalleague.ru',contactSite:'www.digitalleague.ru',contactPhone:'+7 495 790 90 73',
+    showContactEmail:true,showContactSite:true,showContactPhone:true,showContactsBlock:true,
+    showMain:true,showSkillsEdu:true,showContactsSection:true,showProjects:true,
+    showLogoSection:false,showLanguages:false,
+    photoSrc:null,showPhoto:true,logoSrc:null,logoBottomSrc:null,showLogo:true,showLogoBottom:true,
+    languages:[],
+    languageLevels:['Новичок','Средний','Хороший','Очень хороший','Свободно владею','A1','A2','B1','B2','C1','C2'],
+    projects:[{company:'',periodStart:'',periodEnd:'',isCurrent:false,role:'',description:''}],
+
+    init(){this.$nextTick(()=>this.initScaler())},
+
+    initScaler(){
+      const update=()=>{
+        const panel=this.$refs.previewPanel;
+        const scaler=this.$refs.scaler;
+        if(!panel||!scaler)return;
+        const available=panel.clientWidth-64;
+        const scale=Math.min(1,available/912);
+        scaler.style.transform=`scale(${scale})`;
+        scaler.style.transformOrigin='top center';
+        scaler.style.marginBottom=`${(912*scale)-912}px`;
+      };
+      update();
+      window.addEventListener('resize',update);
+    },
+
+    async exportPDF(){
+      const{jsPDF}=window.jspdf;
+      const element=this.$refs.resumePage;
+      const scaler=this.$refs.scaler;
+      if(scaler){scaler.style.transform='scale(1)';scaler.style.marginBottom='0';}
+      await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
+      const canvas=await html2canvas(element,{scale:2,useCORS:true,allowTaint:true,logging:false,windowWidth:912});
+      if(scaler)this.initScaler();
+      const imgW=canvas.width/2,imgH=canvas.height/2;
+      const pdf=new jsPDF({orientation:'portrait',unit:'px',format:[imgW,imgH]});
+      pdf.addImage(canvas.toDataURL('image/jpeg',0.95),'JPEG',0,0,imgW,imgH);
+      pdf.save('resume-template2.pdf');
+    }
+  }
+}
+</script>
+</body>
+</html>

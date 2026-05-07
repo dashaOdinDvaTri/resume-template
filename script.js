@@ -59,13 +59,17 @@ function resumeData() {
         if (!panel) return
         const available = panel.clientWidth - 64
         const scale = Math.min(1, available / 912)
+        const marginBottom = (912 * scale) - 912
         document.querySelectorAll('.preview-scaler').forEach(scaler => {
           scaler.style.transform = `scale(${scale})`
-          scaler.style.marginBottom = `${(912 * scale - 912)}px`
+          scaler.style.transformOrigin = 'top center'
+          scaler.style.marginBottom = `${marginBottom}px`
         })
       }
       update()
-      window.addEventListener('resize', update)
+      window._scalerUpdate = update
+      window.removeEventListener('resize', window._scalerUpdate)
+      window.addEventListener('resize', window._scalerUpdate)
     },
     async exportPDF() {
       const { jsPDF } = window.jspdf

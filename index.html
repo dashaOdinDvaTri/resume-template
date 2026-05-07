@@ -62,7 +62,7 @@
           </div>
         </div>
 
-        <div class="template-card" @click="selectedTemplate = 2; $nextTick(() => initScaler())">
+        <div class="template-card" @click="window.location.href='template2.html'">
           <div class="template-card-preview template-card-preview--2">
             <div class="tpl-preview-left" style="background:#f0f4ff;">
               <div style="width:48px; height:48px; border-radius:50%; background:#c8d8f0; margin:0 auto 8px;"></div>
@@ -496,7 +496,7 @@
     </div>
 
     <div class="preview-panel">
-      <div class="preview-scaler">
+      <div class="preview-scaler" x-show="selectedTemplate === 1">
       <div class="page" x-show="selectedTemplate === 1" style="display:none;" x-effect="$el.style.display = selectedTemplate === 1 ? 'flex' : 'none'">
         <aside class="left-col" :style="'background: ' + bgColor">
           <div class="logo" x-show="showLogo"><img :src="logoSrc || 'logo.png'" alt="Логотип"></div>
