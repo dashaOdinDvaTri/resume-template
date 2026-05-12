@@ -121,17 +121,35 @@
   <div class="form-panel">
     <div class="form-panel-inner">
       <div class="breadcrumb">
-        <a href="index.html">Выбор шаблона</a>
+        <span @click="showBackModal=true" style="color:#008af5;cursor:pointer;">Выбор шаблона</span>
         <span>→</span>
         <span>Шаблон 2</span>
       </div>
-      <div class="form-header">
-        <h2>Заполните резюме</h2>
-        <div style="display:flex;gap:8px;align-items:center;">
-        <button @click="newResume()" style="padding:10px 16px;border:1px solid #e53935;border-radius:100px;background:#fff;font-family:'Museo Sans Cyrl',sans-serif;font-size:14px;color:#e53935;cursor:pointer;">🗑 Новое</button><button @click="loadDraft()" style="padding:10px 16px;border:1px solid #d0d5e0;border-radius:100px;background:#fff;font-family:'Museo Sans Cyrl',sans-serif;font-size:14px;color:#334969;cursor:pointer;">📂 Загрузить</button>
-        <button @click="saveDraft()" style="padding:10px 16px;border:1px solid #008af5;border-radius:100px;background:#fff;font-family:'Museo Sans Cyrl',sans-serif;font-size:14px;color:#008af5;cursor:pointer;">💾 Сохранить</button>
-        <button class="export-btn" @click="exportPDF()">Скачать PDF</button>
-      </div>
+      <div style="margin-bottom:32px;">
+        <h2 style="font-family:'Museo Sans Cyrl',sans-serif;font-weight:700;font-size:28px;color:#000;margin-bottom:12px;line-height:normal;">Заполните резюме</h2>
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:nowrap;">
+          <div style="display:flex;gap:16px;align-items:center;height:32px;">
+            <div style="display:flex;align-items:center;gap:4px;">
+              <button @click="saveDraft()" style="padding:4px;border:none;background:none;font-family:'Museo Sans Cyrl',sans-serif;font-size:14px;font-weight:500;color:#008af5;cursor:pointer;display:flex;align-items:center;gap:4px;white-space:nowrap;line-height:16px;">Сохранить .JSON </button><span style="position:relative;display:inline-flex;align-items:center;" x-data="{show:false}" @mouseenter="show=true" @mouseleave="show=false">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="cursor:pointer;">
+                <circle cx="8" cy="8" r="7.5" stroke="#008af5"/>
+                <text x="8" y="12" text-anchor="middle" font-size="10" fill="#008af5" font-family="serif">i</text>
+              </svg>
+              <div x-show="show" style="position:absolute;top:28px;left:50%;transform:translateX(-50%);z-index:9999;pointer-events:none;">
+                <div style="position:relative;display:flex;flex-direction:column;align-items:center;">
+                  <div style="width:8px;height:8px;background:#fff;border-left:1px solid #e8eaf0;border-bottom:1px solid #e8eaf0;transform:rotate(135deg);margin-bottom:-5px;z-index:2;"></div>
+                  <div style="background:#fff;border:1px solid #e8eaf0;border-radius:3px;padding:10px;width:241px;box-shadow:0 4px 20px rgba(42,43,56,0.08);z-index:1;">
+                    <span style="font-family:'Museo Sans Cyrl',sans-serif;font-weight:300;font-size:12px;line-height:16px;color:#000;">Файл .json сохраняет данные и настройки резюме для последующей загрузки и редактирования</span>
+                  </div>
+                </div>
+              </div>
+            </span>
+            </div>
+            <button @click="loadDraft()" style="padding:4px;border:none;background:none;font-family:'Museo Sans Cyrl',sans-serif;font-size:14px;font-weight:500;color:#008af5;cursor:pointer;white-space:nowrap;line-height:16px;">Загрузить .JSON</button>
+            <button @click="newResume()" style="padding:4px;border:none;background:none;font-family:'Museo Sans Cyrl',sans-serif;font-size:14px;font-weight:500;color:#ff4d47;cursor:pointer;white-space:nowrap;line-height:16px;">Очистить</button>
+          </div>
+          <button @click="exportPDF()" style="flex-shrink:0;padding:12px 4px;background:#008af5;color:#fff;border:none;border-radius:24px;font-family:'Museo Sans Cyrl',sans-serif;font-size:14px;font-weight:500;cursor:pointer;line-height:16px;min-width:146px;">Скачать PDF</button>
+        </div>
       </div>
 
       <!-- Основное -->
@@ -363,10 +381,23 @@
   </div>
 
 </div>
+
+<!-- Модальное окно -->
+<div x-show="showBackModal" style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.4);z-index:99999;display:flex;align-items:center;justify-content:center;" @click.self="showBackModal=false">
+  <div style="background:#fff;border-radius:16px;padding:32px;width:400px;max-width:90vw;box-shadow:0 8px 40px rgba(0,0,0,0.2);">
+    <div style="font-family:'Museo Sans Cyrl',sans-serif;font-weight:700;font-size:20px;color:#1a2336;margin-bottom:12px;">Вернуться к выбору шаблона?</div>
+    <div style="font-family:'Museo Sans Cyrl',sans-serif;font-size:14px;color:#959dac;margin-bottom:24px;">Все введённые данные будут потеряны.</div>
+    <div style="display:flex;gap:12px;justify-content:flex-end;">
+      <button @click="showBackModal=false" style="padding:10px 20px;border:1px solid #d0d5e0;border-radius:8px;background:#fff;font-family:'Museo Sans Cyrl',sans-serif;font-size:14px;color:#334969;cursor:pointer;">Остаться</button>
+      <button @click="window.location.href='index.html'" style="padding:10px 20px;border:none;border-radius:8px;background:#008af5;font-family:'Museo Sans Cyrl',sans-serif;font-size:14px;color:#fff;cursor:pointer;font-weight:600;">Вернуться</button>
+    </div>
+  </div>
+</div>
+
 <script>
 function t2Data(){
   return{
-    fullName:'',jobTitle:'',skills:'',education:'',bgColor:'#E9EFF5',
+    showBackModal:false,fullName:'',jobTitle:'',skills:'',education:'',bgColor:'#E9EFF5',
     showSkills:true,showEducation:true,
     contactEmail:'info@digitalleague.ru',contactSite:'www.digitalleague.ru',contactPhone:'+7 495 790 90 73',
     showContactEmail:true,showContactSite:true,showContactPhone:true,showContactsBlock:true,
@@ -378,23 +409,7 @@ function t2Data(){
     projects:[{company:'',organization:'',periodStart:'',periodEnd:'',isCurrent:false,role:'',description:''}],
 
     init(){
-      // Загружаем сохранённые данные
-      const saved = localStorage.getItem('t2data');
-      if(saved){
-        try {
-          const d = JSON.parse(saved);
-          const keys = ['fullName','jobTitle','skills','education','bgColor','contactEmail','contactSite','contactPhone','showSkills','showEducation','showContactEmail','showContactSite','showContactPhone','showContactsBlock','showPhoto','showLogo','showLogoBottom','languages','projects'];
-          keys.forEach(k => { if(d[k] !== undefined) this[k] = d[k]; });
-        } catch(e){}
-      }
       this.$nextTick(()=>this.initScaler());
-      // Сохраняем при каждом изменении
-      this.$watch('$data', (val) => {
-        const keys = ['fullName','jobTitle','skills','education','bgColor','contactEmail','contactSite','contactPhone','showSkills','showEducation','showContactEmail','showContactSite','showContactPhone','showContactsBlock','showPhoto','showLogo','showLogoBottom','languages','projects'];
-        const toSave = {};
-        keys.forEach(k => toSave[k] = this[k]);
-        localStorage.setItem('t2data', JSON.stringify(toSave));
-      }, {deep: true});
     },
 
     initScaler(){
@@ -414,7 +429,6 @@ function t2Data(){
 
     newResume(){
       if(!confirm('Начать новое резюме? Все данные будут очищены.')) return;
-      localStorage.removeItem('t2data');
       this.fullName='';this.jobTitle='';this.skills='';this.education='';
       this.bgColor='#E9EFF5';this.contactEmail='info@digitalleague.ru';
       this.contactSite='www.digitalleague.ru';this.contactPhone='+7 495 790 90 73';

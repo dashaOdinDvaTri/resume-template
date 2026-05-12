@@ -21,41 +21,25 @@
 
   <!-- Экран выбора шаблона -->
   <div class="template-select-screen" x-show="!selectedTemplate">
-    <div class="template-select-inner">
-      <div class="template-select-header">
-        <img src="logo.png" alt="Логотип" style="height:40px; width:auto;">
-        <h1 class="template-select-title">Выберите шаблон резюме</h1>
-        <p class="template-select-subtitle">Данные можно будет изменить в любой момент</p>
+    <div class="template-select-inner" style="padding-top:32px;">
+      <div class="template-select-header" style="width:100%;max-width:810px;">
+        <!-- Синяя карточка -->
+        <div style="background:#3287f8;border-radius:24px;padding:20px 40px;margin-bottom:24px;width:100%;">
+          <img src="logo-white.png" alt="Логотип" style="height:28px;width:auto;margin-bottom:16px;display:block;margin-left:auto;margin-right:auto;">
+          <div style="color:#fff;">
+            <div style="font-family:'Museo Sans Cyrl',sans-serif;font-weight:900;font-size:32px;line-height:1.1;margin-bottom:8px;">Резюме Конструктор</div>
+            <div style="font-family:'Museo Sans Cyrl',sans-serif;font-weight:400;font-size:14px;line-height:1.2;">Простой способ подготовить резюме в фирменном стиле Лиги</div>
+          </div>
+        </div>
+        <!-- Серая плашка -->
+        <div style="background:#eaf1f5;border-radius:24px;padding:16px 40px;width:100%;text-align:center;margin-bottom:0;">
+          <h1 style="font-family:'Museo Sans Cyrl',sans-serif;font-weight:700;font-size:20px;color:#172a46;margin-bottom:8px;line-height:1.1;">Выберите шаблон резюме</h1>
+          <p style="font-family:'Museo Sans Cyrl',sans-serif;font-weight:500;font-size:15px;color:rgba(51,73,105,0.45);margin:0;">Данные можно будет изменить в любой момент</p>
+        </div>
       </div>
       <div class="template-select-cards">
         <div class="template-card" @click="selectedTemplate = 1; $nextTick(() => initScaler())">
-          <div class="template-card-preview template-card-preview--1">
-            <div class="tpl-preview-left" style="background:#FEECFF;">
-              <div style="width:48px; height:48px; border-radius:50%; background:#e0c8e8; margin:0 auto 8px;"></div>
-              <div style="height:6px; background:#334969; opacity:0.4; border-radius:3px; margin-bottom:4px;"></div>
-              <div style="height:4px; background:#334969; opacity:0.2; border-radius:3px; margin-bottom:4px;"></div>
-              <div style="height:4px; background:#334969; opacity:0.2; border-radius:3px; width:70%;"></div>
-            </div>
-            <div class="tpl-preview-right">
-              <div style="height:10px; background:#172a46; opacity:0.8; border-radius:3px; margin-bottom:6px; width:60%;"></div>
-              <div style="height:6px; background:#172a46; opacity:0.4; border-radius:3px; margin-bottom:16px; width:40%;"></div>
-              <div style="height:4px; background:#172a46; opacity:0.15; border-radius:3px; margin-bottom:4px;"></div>
-              <div style="display:flex; gap:6px; margin-bottom:8px;">
-                <div style="width:8px; height:8px; border-radius:50%; border:1px solid #172a46; flex-shrink:0; margin-top:2px;"></div>
-                <div style="flex:1;">
-                  <div style="height:4px; background:#172a46; opacity:0.3; border-radius:3px; margin-bottom:3px;"></div>
-                  <div style="height:3px; background:#172a46; opacity:0.15; border-radius:3px;"></div>
-                </div>
-              </div>
-              <div style="display:flex; gap:6px; margin-bottom:8px;">
-                <div style="width:8px; height:8px; border-radius:50%; border:1px solid #172a46; flex-shrink:0; margin-top:2px;"></div>
-                <div style="flex:1;">
-                  <div style="height:4px; background:#172a46; opacity:0.3; border-radius:3px; margin-bottom:3px;"></div>
-                  <div style="height:3px; background:#172a46; opacity:0.15; border-radius:3px;"></div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <div class="template-card-preview template-card-preview--1" style="padding:0;overflow:hidden;background:#F2F6FF;"><img src="template-1.svg" style="width:100%;height:100%;object-fit:contain;display:block;padding:16px;"></div>
           <div class="template-card-info">
             <div class="template-card-name">Шаблон 1</div>
             <div class="template-card-desc">Классический с цветной боковой панелью</div>
@@ -63,37 +47,7 @@
         </div>
 
         <div class="template-card" @click="window.location.href='template2.html'">
-          <div class="template-card-preview template-card-preview--2">
-            <div class="tpl-preview-left" style="background:#f0f4ff;">
-              <div style="width:48px; height:48px; border-radius:50%; background:#c8d8f0; margin:0 auto 8px;"></div>
-              <div style="background:#fff; border-radius:8px; padding:6px 8px; margin-bottom:6px;">
-                <div style="height:5px; background:#008af5; opacity:0.8; border-radius:3px; margin-bottom:4px; width:70%;"></div>
-                <div style="height:3px; background:#334969; opacity:0.3; border-radius:3px; margin-bottom:2px;"></div>
-                <div style="height:3px; background:#334969; opacity:0.2; border-radius:3px; width:80%;"></div>
-              </div>
-              <div style="background:#fff; border-radius:8px; padding:6px 8px;">
-                <div style="height:5px; background:#008af5; opacity:0.8; border-radius:3px; margin-bottom:4px; width:60%;"></div>
-                <div style="height:3px; background:#334969; opacity:0.2; border-radius:3px;"></div>
-              </div>
-            </div>
-            <div class="tpl-preview-right" style="background:#f8faff;">
-              <div style="background:linear-gradient(79deg,#008af5 26%,rgba(0,138,245,0) 106%); border-radius:8px; padding:10px 8px; margin-bottom:8px;">
-                <div style="height:8px; background:rgba(255,255,255,0.9); border-radius:3px; margin-bottom:4px; width:55%;"></div>
-                <div style="height:5px; background:rgba(255,255,255,0.6); border-radius:3px; width:40%;"></div>
-              </div>
-              <div style="background:#fff; border-radius:8px; padding:6px;">
-                <div style="height:5px; background:#008af5; border-radius:3px; margin-bottom:6px; width:50%;"></div>
-                <div style="background:#f3f6f8; border-radius:4px; padding:4px 6px; margin-bottom:3px;">
-                  <div style="height:3px; background:#172a46; opacity:0.4; border-radius:2px; margin-bottom:2px;"></div>
-                  <div style="height:2px; background:#172a46; opacity:0.2; border-radius:2px;"></div>
-                </div>
-                <div style="background:#f3f6f8; border-radius:4px; padding:4px 6px;">
-                  <div style="height:3px; background:#172a46; opacity:0.4; border-radius:2px; margin-bottom:2px;"></div>
-                  <div style="height:2px; background:#172a46; opacity:0.2; border-radius:2px;"></div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <div class="template-card-preview template-card-preview--2" style="padding:0;overflow:hidden;background:#F2F6FF;"><img src="template-2.svg" style="width:100%;height:100%;object-fit:contain;display:block;padding:16px;"></div>
           <div class="template-card-info">
             <div class="template-card-name">Шаблон 2</div>
             <div class="template-card-desc">Современный с карточками и синим акцентом</div>
@@ -127,13 +81,31 @@
         <span style="color:#959dac;" x-text="'Шаблон ' + selectedTemplate"></span>
       </div>
 
-      <div class="form-header">
-        <h2>Заполните резюме</h2>
-        <div style="display:flex;gap:8px;align-items:center;">
-        <button @click="newResume()" style="padding:10px 16px;border:1px solid #e53935;border-radius:100px;background:#fff;font-family:'Museo Sans Cyrl',sans-serif;font-size:14px;color:#e53935;cursor:pointer;">🗑 Новое</button><button @click="loadDraft()" style="padding:10px 16px;border:1px solid #d0d5e0;border-radius:100px;background:#fff;font-family:'Museo Sans Cyrl',sans-serif;font-size:14px;color:#334969;cursor:pointer;">📂 Загрузить</button>
-        <button @click="saveDraft()" style="padding:10px 16px;border:1px solid #008af5;border-radius:100px;background:#fff;font-family:'Museo Sans Cyrl',sans-serif;font-size:14px;color:#008af5;cursor:pointer;">💾 Сохранить</button>
-        <button class="export-btn" @click="exportPDF()" style="width:auto;padding:12px 32px;margin:0;">Скачать PDF</button>
-      </div>
+      <div style="margin-bottom:32px;">
+        <h2 style="font-family:'Museo Sans Cyrl',sans-serif;font-weight:700;font-size:28px;color:#000;margin-bottom:12px;line-height:normal;">Заполните резюме</h2>
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:nowrap;">
+          <div style="display:flex;gap:16px;align-items:center;height:32px;">
+            <div style="display:flex;align-items:center;gap:4px;">
+              <button @click="saveDraft()" style="padding:4px;border:none;background:none;font-family:'Museo Sans Cyrl',sans-serif;font-size:14px;font-weight:500;color:#008af5;cursor:pointer;display:flex;align-items:center;gap:4px;white-space:nowrap;line-height:16px;">Сохранить .JSON </button><span style="position:relative;display:inline-flex;align-items:center;" x-data="{show:false}" @mouseenter="show=true" @mouseleave="show=false">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="cursor:pointer;">
+                <circle cx="8" cy="8" r="7.5" stroke="#008af5"/>
+                <text x="8" y="12" text-anchor="middle" font-size="10" fill="#008af5" font-family="serif">i</text>
+              </svg>
+              <div x-show="show" style="position:absolute;top:28px;left:50%;transform:translateX(-50%);z-index:9999;pointer-events:none;">
+                <div style="position:relative;display:flex;flex-direction:column;align-items:center;">
+                  <div style="width:8px;height:8px;background:#fff;border-left:1px solid #e8eaf0;border-bottom:1px solid #e8eaf0;transform:rotate(135deg);margin-bottom:-5px;z-index:2;"></div>
+                  <div style="background:#fff;border:1px solid #e8eaf0;border-radius:3px;padding:10px;width:241px;box-shadow:0 4px 20px rgba(42,43,56,0.08);z-index:1;">
+                    <span style="font-family:'Museo Sans Cyrl',sans-serif;font-weight:300;font-size:12px;line-height:16px;color:#000;">Файл .json сохраняет данные и настройки резюме для последующей загрузки и редактирования</span>
+                  </div>
+                </div>
+              </div>
+            </span>
+            </div>
+            <button @click="loadDraft()" style="padding:4px;border:none;background:none;font-family:'Museo Sans Cyrl',sans-serif;font-size:14px;font-weight:500;color:#008af5;cursor:pointer;white-space:nowrap;line-height:16px;">Загрузить .JSON</button>
+            <button @click="newResume()" style="padding:4px;border:none;background:none;font-family:'Museo Sans Cyrl',sans-serif;font-size:14px;font-weight:500;color:#ff4d47;cursor:pointer;white-space:nowrap;line-height:16px;">Очистить</button>
+          </div>
+          <button @click="exportPDF()" style="flex-shrink:0;padding:12px 4px;background:#008af5;color:#fff;border:none;border-radius:24px;font-family:'Museo Sans Cyrl',sans-serif;font-size:14px;font-weight:500;cursor:pointer;line-height:16px;min-width:146px;">Скачать PDF</button>
+        </div>
       </div>
 
       <div class="form-section">
