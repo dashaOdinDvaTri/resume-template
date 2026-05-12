@@ -387,7 +387,7 @@
 </div>
 
 <!-- Модальное окно -->
-<div x-show="showBackModal" style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.4);z-index:99999;display:flex;align-items:center;justify-content:center;" @click.self="showBackModal=false">
+<div x-cloak x-show="showBackModal" style="position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.4);z-index:99999;display:flex;align-items:center;justify-content:center;" @click.self="showBackModal=false">
   <div style="background:#fff;border-radius:16px;padding:32px;width:400px;max-width:90vw;box-shadow:0 8px 40px rgba(0,0,0,0.2);">
     <div style="font-family:'Museo Sans Cyrl',sans-serif;font-weight:700;font-size:20px;color:#1a2336;margin-bottom:12px;">Вернуться к выбору шаблона?</div>
     <div style="font-family:'Museo Sans Cyrl',sans-serif;font-size:14px;color:#959dac;margin-bottom:24px;">Все введённые данные будут потеряны.</div>

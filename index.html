@@ -62,7 +62,7 @@
   </div>
 
   <!-- Модальное окно подтверждения -->
-  <div x-show="showBackModal" class="modal-overlay" @click.self="showBackModal = false">
+  <div x-cloak x-show="showBackModal" class="modal-overlay" @click.self="showBackModal = false">
     <div class="modal-box">
       <div class="modal-title">Вернуться к выбору шаблона?</div>
       <div class="modal-subtitle">Все введённые данные будут потеряны.</div>
